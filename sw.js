@@ -1,6 +1,5 @@
-// CareDesk service worker: keeps the app working offline.
 const CACHE = 'caredesk-v1';
-const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
+const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192-1.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -14,8 +13,6 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Network first for the app itself (so updates arrive), cache as fallback.
-// Requests to other origins (for example Ollama) are never touched.
 self.addEventListener('fetch', e => {
   const req = e.request;
   const url = new URL(req.url);
