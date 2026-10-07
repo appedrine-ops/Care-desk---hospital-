@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b6f6a">
+<title>Book a visit</title>
+<style>
+:root{
+  --bg:#f1f5f5; --surface:#ffffff; --ink:#10282b; --muted:#5a7073; --line:#d8e2e3;
+  --brand:#0b6f6a; --brand-ink:#ffffff; --soft:#e2f0ef; --wa:#128c4a; --bad:#b3261e; --bad-bg:#fbe3e1;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0c1a1c; --surface:#132427; --ink:#e4efef; --muted:#8fa8aa; --line:#24393c;
+  --brand:#3fb3ab; --brand-ink:#062624; --soft:#173130; --wa:#3fcf85; --bad:#ff8f86; --bad-bg:#3a1a18; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);padding:16px}
+main{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px;padding-block:8px 32px}
+h1{font:600 26px/1.2 var(--serif);margin:0}
+p{margin:0}
+.muted{color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:40px;height:40px;border-radius:10px;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center;flex:none}
+.logo svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted);min-width:0}
+input,select,textarea{font:inherit;font-weight:400;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-width:0}
+textarea{resize:vertical}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.btns{display:flex;flex-direction:column;gap:10px}
+.btn{display:flex;justify-content:center;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:12px 16px;border-radius:10px;font:inherit;font-weight:600;text-decoration:none;cursor:pointer}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.warn{background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:10px 12px;font-size:14px}
+.emerg{font-size:14px;border-left:3px solid var(--bad);padding-left:12px}
+[hidden]{display:none!important}
+@media (max-width:420px){.row{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><div><h1 id="clinic">Book a visit</h1><p class="muted">Tell us what you need and we will confirm by message.</p></div></div>
+
+  <div class="warn" id="nolink" hidden>This page has no clinic contact details. Please ask the clinic for their booking link.</div>
+
+  <form class="card" id="f" autocomplete="on">
+    <label>What do you need?
+      <select id="type"><option>Clinic appointment</option><option id="hvopt">Home visit</option><option>Question</option></select>
+    </label>
+    <div class="row">
+      <label>Your name<input id="name" required autocomplete="name"></label>
+      <label>Your phone<input id="phone" type="tel" required autocomplete="tel"></label>
+    </div>
+    <div class="row" id="when">
+      <label>Preferred date<input id="date" type="date"></label>
+      <label>Preferred time<input id="time" type="time"></label>
+    </div>
+    <div id="home" hidden>
+      <label>Home address and landmark<input id="addr" autocomplete="street-address" placeholder="Street, area, blue gate, near the church"></label>
+    </div>
+    <label>Tell us more<textarea id="msg" rows="4" placeholder="Who is the patient (age)? What is the problem?"></textarea></label>
+    <div class="btns">
+      <button type="button" class="btn wa" id="bwa">Send on WhatsApp</button>
+      <button type="button" class="btn" id="bmail" hidden>Send by email</button>
+      <a class="btn" id="bcall" hidden>Call us</a>
+    </div>
+    <p class="muted" style="font-size:13px">Your message opens in WhatsApp or your email app, ready to send. Nothing is sent until you press send there.</p>
+  </form>
+
+  <p class="emerg"><b>Emergency?</b> Do not wait for a reply. Call us now or go to the nearest emergency department. This form is for routine requests.</p>
+</main>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  var DEF={n:'CareDesk Hospital',wa:'256769222862',tel:'256769222862',mail:'appedrine@gmail.com'};
+  var clinic=(q.get('n')||DEF.n).slice(0,80);
+  var wa=(q.get('wa')||DEF.wa).replace(/\D/g,'');
+  var tel=(q.get('tel')||DEF.tel).replace(/\D/g,'');
+  var mq=q.get('mail')||DEF.mail;var mail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mq)?mq:'';
+  var hv=q.get('hv')!=='0';
+  var $=function(id){return document.getElementById(id)};
+  if(clinic){$('clinic').textContent=clinic;document.title='Book a visit - '+clinic}
+  if(!wa&&!tel&&!mail)$('nolink').hidden=false;
+  if(!wa)$('bwa').hidden=true;
+  if(mail)$('bmail').hidden=false;
+  if(tel){$('bcall').hidden=false;$('bcall').href='tel:+'+tel;$('bcall').textContent='Call '+'+'+tel}
+  if(!hv)$('hvopt').remove();
+  var today=new Date();today.setMinutes(today.getMinutes()-today.getTimezoneOffset());
+  $('date').min=today.toISOString().slice(0,10);
+  function sync(){
+    var t=$('type').value;
+    $('home').hidden=t!=='Home visit';
+    $('when').hidden=t==='Question';
+  }
+  $('type').addEventListener('change',sync);sync();
+  function build(){
+    var f=$('f');
+    if(!f.reportValidity())return null;
+    var t=$('type').value,L=[];
+    L.push('Hello'+(clinic?' '+clinic:'')+',');
+    L.push('Request: '+t);
+    L.push('Name: '+$('name').value.trim());
+    L.push('Phone: '+$('phone').value.trim());
+    if(t!=='Question'&&($('date').value||$('time').value))L.push('Preferred time: '+($('date').value||'any day')+($('time').value?' at '+$('time').value:''));
+    if(t==='Home visit'&&$('addr').value.trim())L.push('Address: '+$('addr').value.trim());
+    if($('msg').value.trim())L.push('Details: '+$('msg').value.trim());
+    return L.join('\n');
+  }
+  function go(url){var w=window.open(url,'_blank');if(!w)location.href=url}
+  $('bwa').addEventListener('click',function(){var m=build();if(m)go('https://wa.me/'+wa+'?text='+encodeURIComponent(m))});
+  $('bmail').addEventListener('click',function(){var m=build();if(m)go('mailto:'+mail+'?subject='+encodeURIComponent($('type').value+(clinic?' - '+clinic:''))+'&body='+encodeURIComponent(m))});
+})();
+</script>
+</body>
+</html>
