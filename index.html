@@ -16,6 +16,7 @@
 :root{
   --bg:#f1f5f5; --surface:#ffffff; --ink:#10282b; --muted:#5a7073; --line:#d8e2e3;
   --brand:#0b6f6a; --brand-ink:#ffffff; --soft:#e2f0ef;
+  --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;
   --ok:#1d7a4a; --ok-bg:#e0f3e8; --warn:#9a5a08; --warn-bg:#fbefd6; --bad:#b3261e; --bad-bg:#fbe3e1;
   --shadow:0 1px 2px rgba(16,40,43,.06),0 8px 24px rgba(16,40,43,.08);
   --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
@@ -25,11 +26,13 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0c1a1c; --surface:#132427; --ink:#e4efef; --muted:#8fa8aa; --line:#24393c;
   --brand:#3fb3ab; --brand-ink:#062624; --soft:#173130;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;
   --ok:#5fcf94; --ok-bg:#15301f; --warn:#e5a54b; --warn-bg:#35280f; --bad:#ff8f86; --bad-bg:#3a1a18;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark;}}
 :root[data-theme="dark"]{
   --bg:#0c1a1c; --surface:#132427; --ink:#e4efef; --muted:#8fa8aa; --line:#24393c;
   --brand:#3fb3ab; --brand-ink:#062624; --soft:#173130;
+  --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;
   --ok:#5fcf94; --ok-bg:#15301f; --warn:#e5a54b; --warn-bg:#35280f; --bad:#ff8f86; --bad-bg:#3a1a18;
   --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35); color-scheme:dark;}
 *{box-sizing:border-box}
@@ -71,6 +74,29 @@ main#view{padding:24px;max-width:1280px;width:100%}
 .btn:hover{border-color:var(--brand)}
 .btn.pri{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
 .btn.pri:hover{filter:brightness(1.08)}
+.rxl{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,1.4fr) 70px 32px;gap:8px;align-items:center}
+.tests{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.chk{display:flex;flex-direction:row;gap:8px;align-items:center;font-weight:400;color:var(--ink);font-size:14px;border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.chk span:last-child{margin-left:auto}
+@media (max-width:820px){.rxl{grid-template-columns:repeat(2,minmax(0,1fr))}.tests{grid-template-columns:minmax(0,1fr)}}
+.viz{display:flex;flex-direction:column;gap:10px}
+.donutw{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.donutw svg{width:140px;height:140px;flex:none}
+.donutw .ring{fill:none;stroke-width:22}
+.donutw text{fill:var(--ink);font-family:var(--sans)}
+.leg{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px;font-size:13px}
+.leg div{display:flex;align-items:center;gap:8px}
+.leg i{width:10px;height:10px;border-radius:3px;flex:none}
+.leg b{margin-left:auto;padding-left:8px}
+.hb{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;font-size:13px}
+.hb .tr{height:10px;border-radius:5px;background:var(--soft);overflow:hidden}
+.hb .tr span{display:block;height:100%;border-radius:5px;background:var(--s1)}
+.hb .tr span.low{background:var(--s2)}
+.hb .tr span.mid{background:var(--s4)}
+.hb .lab{display:flex;justify-content:space-between;gap:8px}
+.hb .lab span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chart .ar{fill:var(--s1);opacity:.14} .chart .ln{fill:none;stroke:var(--s1);stroke-width:2;stroke-linejoin:round;stroke-linecap:round} .chart .dot{fill:var(--s1);stroke:var(--surface);stroke-width:2}
+.chk.red{border-color:var(--bad);color:var(--bad)}
 .btn.bad{color:var(--bad)} .btn.sm{padding:4px 9px;font-size:12px}
 a.btn{text-decoration:none;color:var(--ink)}
 .hv{display:flex;flex-direction:column;gap:10px}
@@ -172,6 +198,8 @@ details table td{padding:4px 6px;border:0;font-size:12.5px}
   body.printing #printArea{display:block;padding:24px;color:#000;background:#fff;font-family:var(--sans)}
   body.printing{background:#fff}
   #printArea table td,#printArea table th{border-bottom:1px solid #ccc;color:#000}
+  body.printing #printArea{--ink:#000;--muted:#444;--surface:#fff;--line:#ccc;--soft:#e8eceb;--brand:#0b6f6a;--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100}
+  body.printing #printArea .btn{display:none}
 }
 
 @media (max-width:980px){
@@ -204,6 +232,7 @@ details table td{padding:4px 6px;border:0;font-size:12.5px}
       <div class="err" id="lerr" role="alert"></div>
       <button class="btn pri" style="justify-content:center;padding:10px">Sign in</button>
     </form>
+    <button type="button" class="btn sm" id="cloudLink" data-act="cloudSetup" style="align-self:center"></button>
     <details>
       <summary>Demo accounts</summary>
       <table><tbody>
@@ -234,6 +263,7 @@ details table td{padding:4px 6px;border:0;font-size:12.5px}
     <header class="topbar">
       <button class="btn" id="menuBtn" data-act="openNav" aria-label="Open menu"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <h1 class="title grow" id="pageTitle"></h1>
+      <button class="pill gray" id="cloudChip" data-act="cloudChip" hidden></button>
       <button class="pill gray" id="aiChip" data-act="goSettings" style="border-radius:99px;cursor:pointer" title="Ollama connection"></button>
     </header>
     <main id="view"></main>
@@ -265,9 +295,165 @@ async function sha(s){
   try{ if(crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('caredesk:'+s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');} }catch(e){}
   let h=5381;for(const c of 'caredesk:'+s)h=((h<<5)+h+c.charCodeAt(0))|0;return 'x'+h;
 }
-function save(){try{localStorage.setItem(LS,JSON.stringify(db))}catch(e){toast('Could not save: browser storage is full or blocked.','bad')}}
+function localSave(){try{localStorage.setItem(LS,JSON.stringify(db))}catch(e){toast('Could not save: browser storage is full or blocked.','bad')}}
+function save(){localSave();schedulePush()}
 function toast(msg,kind=''){const t=document.createElement('div');t.className='toast '+kind;t.textContent=msg;$('#toasts').append(t);setTimeout(()=>t.remove(),3800)}
-const uid=p=>p+(++db.seq);
+const uid=p=>p+(++db.seq)+devCode();
+const invId=()=>{const m=Math.max(1000,...db.invoices.map(i=>{const x=/^INV-(\d+)/.exec(String(i.id));return x?+x[1]:0}));return 'INV-'+(m+1)+devCode()};
+
+/* ============ online database (Supabase) ============ */
+const SYNC_LS='caredesk.sync';
+const SYNC_COLLS=['users','patients','visits','appointments','medicines','invoices','visitors','blocked','requests','homeVisits','rx','labs','docs'];
+const LOCAL_ONLY=['ollamaUrl','model'];
+let CS=null;try{CS=JSON.parse(localStorage.getItem(SYNC_LS))}catch(e){}
+const saveCS=()=>{try{localStorage.setItem(SYNC_LS,JSON.stringify(CS))}catch(e){}};
+const cloudOn=()=>!!(CS&&CS.ready&&CS.url&&CS.key&&CS.refresh);
+function devCode(){return CS&&CS.dev?CS.dev:''}
+const stable=v=>JSON.stringify(v,(k,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.keys(x).sort().reduce((o,y)=>(o[y]=x[y],o),{}):x);
+function hash(v){const t=stable(v)||'';let h1=0xdeadbeef,h2=0x41c6ce57;for(let i=0;i<t.length;i++){const c=t.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36)}
+function localMap(){
+  const m={};SYNC_COLLS.forEach(c=>(db[c]||[]).forEach(r=>{if(r&&r.id!==undefined)m[c+'/'+r.id]=r}));
+  const st=Object.assign({},db.settings);LOCAL_ONLY.forEach(k=>delete st[k]);m['settings/main']=st;return m;
+}
+const splitKey=k=>{const i=k.indexOf('/');return[k.slice(0,i),k.slice(i+1)]};
+function setTok(j){CS.access=j.access_token;CS.refresh=j.refresh_token||CS.refresh;CS.exp=Date.now()+Math.max((j.expires_in||3600)-60,30)*1000;saveCS()}
+async function sbToken(){
+  if(CS.access&&Date.now()<(CS.exp||0))return CS.access;
+  const r=await fetch(CS.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:CS.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:CS.refresh})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok){const e=new Error('Please sign in to the cloud again.');e.auth=true;throw e}
+  setTok(j);return CS.access;
+}
+async function sbFetch(path,opt={},retry=true){
+  const tok=await sbToken();
+  const r=await fetch(CS.url+path,Object.assign({},opt,{headers:Object.assign({apikey:CS.key,Authorization:'Bearer '+tok,'Content-Type':'application/json'},opt.headers||{})}));
+  if(r.status===401&&retry){CS.exp=0;return sbFetch(path,opt,false)}
+  if(!r.ok){const t=await r.text().catch(()=>'');const e=new Error('Cloud error '+r.status+(t?': '+t.slice(0,140):''));e.status=r.status;if(r.status===401)e.auth=true;throw e}
+  return r.json().catch(()=>null);
+}
+async function syncPush(){
+  const cur=localMap(),ups=[];
+  for(const k in cur){const h=hash(cur[k]);if(CS.snap[k]!==h){const[c,id]=splitKey(k);ups.push({k,h,row:{coll:c,id:id,data:cur[k],deleted:false,updated_by:(me&&me.username)||''}})}}
+  for(const k in CS.snap)if(!(k in cur)){const[c,id]=splitKey(k);ups.push({k,h:null,row:{coll:c,id:id,data:null,deleted:true,updated_by:(me&&me.username)||''}})}
+  for(let i=0;i<ups.length;i+=200){
+    const part=ups.slice(i,i+200);
+    await sbFetch('/rest/v1/records?on_conflict=coll,id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(part.map(x=>x.row))});
+    part.forEach(x=>{if(x.h===null)delete CS.snap[x.k];else CS.snap[x.k]=x.h});saveCS();
+  }
+  return ups.length;
+}
+function applyRow(row){
+  const k=row.coll+'/'+row.id;
+  if(row.coll==='settings'){
+    if(row.deleted||!row.data)return false;
+    const cur=localMap()[k];
+    if(CS.snap[k]!==undefined&&hash(cur)!==CS.snap[k])return false;
+    if(hash(row.data)===hash(cur)){CS.snap[k]=hash(cur);return false}
+    const d=Object.assign({},row.data);LOCAL_ONLY.forEach(x=>delete d[x]);Object.assign(db.settings,d);CS.snap[k]=hash(localMap()[k]);return true;
+  }
+  const arr=db[row.coll];if(!arr)return false;
+  const i=arr.findIndex(x=>x.id===row.id),cur=i>=0?arr[i]:null,known=CS.snap[k]!==undefined;
+  if(cur&&hash(cur)!==CS.snap[k])return false;
+  if(row.deleted){delete CS.snap[k];if(cur){arr.splice(i,1);return true}return false}
+  if(!cur&&known)return false;
+  const h=hash(row.data);
+  if(cur&&hash(cur)===h){CS.snap[k]=h;return false}
+  if(cur)arr[i]=row.data;else arr.push(row.data);
+  CS.snap[k]=h;return true;
+}
+async function syncPull(){
+  let changed=false;
+  for(let guard=0;guard<200;guard++){
+    const q='/rest/v1/records?select=coll,id,data,deleted,updated_at&order=updated_at.asc&limit=1000'+(CS.cursor?'&updated_at=gte.'+encodeURIComponent(CS.cursor):'');
+    const rows=await sbFetch(q)||[];
+    rows.forEach(r=>{if(applyRow(r))changed=true});
+    const last=rows.length?rows[rows.length-1].updated_at:CS.cursor;
+    const moved=last!==CS.cursor;CS.cursor=last;
+    if(!(rows.length>=1000&&moved))break;
+  }
+  if(me)me=db.users.find(u=>u.id===me.id)||me;
+  return changed;
+}
+let syncing=false,again=false,pushT=null,needRender=false,cloudState='sync',cloudErr='';
+function schedulePush(){if(!cloudOn())return;clearTimeout(pushT);pushT=setTimeout(syncNow,1200)}
+function refreshUI(){
+  if(!needRender)return;
+  const d=document.getElementById('dlg');if(d&&d.open)return;
+  const a=document.activeElement;if(a&&a.closest&&a.closest('#view')&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))return;
+  if(me&&!document.getElementById('app').hidden){needRender=false;render()}else needRender=false;
+}
+async function syncNow(){
+  if(!cloudOn())return;
+  if(syncing){again=true;return}
+  syncing=true;setChip('sync');
+  try{
+    await syncPush();const ch=await syncPull();
+    CS.last=Date.now();saveCS();
+    if(ch){localSave();needRender=true}
+    setChip('ok');
+  }catch(e){setChip(e.auth?'auth':'off',e)}
+  finally{syncing=false;refreshUI();if(again){again=false;schedulePush()}}
+}
+function setChip(st,err){cloudState=st;cloudErr=err?(err.message||String(err)):'';updChip()}
+function updChip(){
+  const c=document.getElementById('cloudChip');if(!c)return;
+  const on=cloudOn();c.hidden=!(on||(me&&me.role==='admin'));
+  const tm=CS&&CS.last?new Date(CS.last).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
+  const map={sync:['Syncing…','gray'],ok:['Cloud ✓ '+tm,'ok'],off:['Offline, will sync','warn'],auth:['Cloud: sign in again','bad']};
+  const x=on?(map[cloudState]||map.ok):['Cloud off','gray'];
+  c.textContent=x[0];c.className='pill '+x[1];c.style.cssText='border-radius:99px;cursor:pointer';
+}
+setInterval(()=>{if(!document.hidden)syncNow()},20000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
+window.addEventListener('online',()=>syncNow());
+const cloudWarn=()=>cloudOn()?'<p style="margin:0;color:var(--bad)"><b>The online database is connected.</b> This will also erase the data on every other phone.</p>':'';
+function restoreCS(old){CS=old;try{if(old)saveCS();else localStorage.removeItem(SYNC_LS)}catch(e){}}
+function cloudSetup(){
+  if(cloudOn()){
+    const tm=CS.last?new Date(CS.last).toLocaleString():'not yet';
+    openModal('Clinic online database',`<p style="margin:0">Connected as <b>${esc(CS.email||'clinic account')}</b>.<br><span class="muted sm">${esc(CS.url)}</span></p>
+    <p style="margin:0">Status: <b>${cloudState==='ok'?'Synced':cloudState==='sync'?'Syncing…':cloudState==='auth'?'Sign in again':'Offline, will sync when the internet is back'}</b><br><span class="muted sm">Last sync: ${tm}</span></p>
+    ${cloudErr?`<p class="sm" style="margin:0;color:var(--bad)">${esc(cloudErr)}</p>`:''}
+    <div class="bar" style="margin:0"><button type="button" class="btn pri" data-act="syncNow">Sync now</button>${me&&me.role==='admin'?'<button type="button" class="btn bad" data-act="cloudOff">Disconnect this phone</button>':''}</div>`,{foot:false});
+    return;
+  }
+  openModal('Connect to the online database',`<p class="muted" style="margin:0">Your records are kept online so every phone sees the same patients. Paste the details from your Supabase project (see the setup steps).</p>
+  ${fld('Project URL','url',CS&&CS.url||'','url','required placeholder="https://abcd1234.supabase.co" autocomplete="off"')}
+  ${fld('Public (anon) key','key',CS&&CS.key||'','text','required autocomplete="off" placeholder="eyJ... or sb_publishable_..."')}
+  ${fld('Clinic cloud email','email',CS&&CS.email||'','email','required autocomplete="off"')}
+  ${fld('Clinic cloud password','password','','password','required autocomplete="off"')}
+  <div id="cloudMsg" class="sm muted" role="status"></div>`,
+  {submit:'Connect',onSubmit:async fd=>{
+    const url=String(fd.get('url')).trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,''),msg=document.getElementById('cloudMsg');
+    if(!/^https:\/\/[^\s\/]+$/.test(url)&&!/^http:\/\/localhost(:\d+)?$/.test(url)){msg.textContent='The project URL should look like https://abcd1234.supabase.co';msg.style.color='var(--bad)';return false}
+    const old=CS;msg.style.color='';msg.textContent='Connecting…';
+    try{
+      CS={url:url,key:String(fd.get('key')).trim(),email:String(fd.get('email')).trim(),dev:(old&&old.dev)||Math.random().toString(36).slice(2,4),snap:{},cursor:'',ready:false};
+      const r=await fetch(url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:CS.key,'Content-Type':'application/json'},body:JSON.stringify({email:CS.email,password:String(fd.get('password'))})});
+      const j=await r.json().catch(()=>({}));
+      if(!r.ok)throw new Error(j.error_description||j.msg||'Wrong email or password, or wrong project key.');
+      setTok(j);
+      let has;
+      try{has=await sbFetch('/rest/v1/records?select=coll&limit=1')}catch(e){if(e.status===404||/records/.test(e.message))throw new Error('The database table is missing. Run the setup SQL in Supabase first.');throw e}
+      if(has&&has.length){saveCS();setTimeout(joinModal,0);return}
+      CS.ready=true;saveCS();updChip();toast('Online database connected. Uploading your records…');syncNow();
+    }catch(e){restoreCS(old);msg.textContent=(e&&e.message&&e.message!=='Failed to fetch')?e.message:'Could not reach the project. Check the URL and your internet.';msg.style.color='var(--bad)';return false}
+  }});
+}
+function joinModal(){
+  openModal('Clinic data found online',`<p style="margin:0">The online database already holds your clinic's records. This phone will <b>download them and replace the records stored on this phone</b>.</p>
+  <label class="chk"><input type="checkbox" name="backup" checked style="width:auto"><span>Save a backup of this phone's current data first</span></label>`,
+  {submit:'Download and replace',onSubmit:async fd=>{
+    try{
+      if(fd.has('backup'))download('caredesk-phone-backup-'+stamp()+'.json',JSON.stringify(db),'application/json');
+      SYNC_COLLS.forEach(c=>db[c]=[]);CS.snap={};CS.cursor='';
+      await syncPull();CS.ready=true;CS.last=Date.now();saveCS();localSave();updChip();setChip('ok');
+      toast('Clinic data downloaded. Please sign in with your clinic account.');
+      me=null;sessionStorage.removeItem(SS);showLogin();
+    }catch(e){CS.ready=false;saveCS();toast((e&&e.message)||'Download failed.','bad');return false}
+  }});
+}
+
 
 /* ============ seed data (fictional sample records) ============ */
 function seed(){
@@ -324,25 +510,27 @@ async function loadDb(){
   let ch=false;
   if(!db.visitors){db.visitors=[];ch=true}
   if(!db.blocked){db.blocked=[];ch=true}
-  if(!db.users.some(u=>u.role==='gatekeeper')){db.users.push({id:uid('U'),name:'Gate Officer',username:'gate',role:'gatekeeper',hash:await sha('gate123')});ch=true}
+  if(!cloudOn()&&!db.users.some(u=>u.role==='gatekeeper')){db.users.push({id:uid('U'),name:'Gate Officer',username:'gate',role:'gatekeeper',hash:await sha('gate123')});ch=true}
   if(!db.settings.visitStart){Object.assign(db.settings,{visitStart:'14:00',visitEnd:'20:00',maxVisitors:2});ch=true}
   const defs={clinicWhatsApp:'0769222862',clinicPhone:'0769222862',clinicEmail:'appedrine@gmail.com',countryCode:'256',homeFee:30000};
   for(const k in defs)if(db.settings[k]===undefined||(k.startsWith('clinic')&&k!=='clinic'&&!db.settings[k])){db.settings[k]=defs[k];ch=true}
+  if(!db.rx||!db.labs||!db.docs){const sc=sampleClinical();db.rx=db.rx||sc.rx;db.labs=db.labs||sc.labs;db.docs=db.docs||[];ch=true}
+  if(db.settings.recallDays===undefined){db.settings.recallDays=90;ch=true}
   if(!db.requests||!db.homeVisits){const sm=sampleOps();db.requests=db.requests||sm.requests;db.homeVisits=db.homeVisits||sm.homeVisits;ch=true}
   if(ch)save();
 }
 
 /* ============ permissions & nav ============ */
-const PERM={dashboard:['admin','doctor','nurse','receptionist'],patients:['admin','doctor','nurse','receptionist'],appointments:['admin','doctor','nurse','receptionist'],requests:['admin','receptionist','nurse'],homevisits:['admin','doctor','nurse','receptionist'],
+const PERM={dashboard:['admin','doctor','nurse','receptionist'],patients:['admin','doctor','nurse','receptionist'],appointments:['admin','doctor','nurse','receptionist'],requests:['admin','receptionist','nurse'],homevisits:['admin','doctor','nurse','receptionist'],lab:['admin','doctor','nurse'],
   inventory:['admin','doctor','nurse'],billing:['admin','receptionist'],ai:['admin','doctor','nurse','receptionist'],visitors:['admin','gatekeeper','receptionist','nurse'],users:['admin'],settings:['admin']};
 const can=m=>PERM[m]?.includes(me.role);
 const isClin=()=>['admin','doctor','nurse'].includes(me.role);
 const IC={dashboard:'<path d="M3 13h7V3H3zM14 21h7V11h-7zM14 3v5h7V3zM3 21h7v-5H3z"/>',patients:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.500-6s6.500 2.500 6.500 6M17 4.500a3.500 3.500 0 010 7M21.500 20c0-2.500-1.500-4.500-3.500-5.500"/>',
   appointments:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',inventory:'<path d="M3 8l9-5 9 5v8l-9 5-9-5zM3 8l9 5 9-5M12 13v8"/>',
   billing:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/>',ai:'<path d="M12 3l1.800 5.200L19 10l-5.200 1.800L12 17l-1.800-5.200L5 10l5.200-1.800zM19 16l.8 2.200L22 19l-2.200.8L19 22l-.8-2.200L16 19l2.200-.8z"/>',
-  requests:'<path d="M21 12a8 8 0 01-11.600 7.100L4 20l1-4.600A8 8 0 1121 12z"/>',homevisits:'<path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/>',
+  lab:'<path d="M9 3h6M10 3v6L4.500 19a1.500 1.500 0 001.300 2h12.400a1.500 1.500 0 001.300-2L14 9V3M7.500 15h9"/>',requests:'<path d="M21 12a8 8 0 01-11.600 7.100L4 20l1-4.600A8 8 0 1121 12z"/>',homevisits:'<path d="M3 11l9-8 9 8M5 10v10h14V10M10 20v-6h4v6"/>',
   visitors:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M12 3v18M9 12h.01M15 12h.01"/>',users:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.500-6 8-6s8 2 8 6"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.900 4.900l2.100 2.100M17 17l2.100 2.100M4.900 19.100L7 17M17 7l2.100-2.100"/>'};
-const TITLES={dashboard:'Dashboard',patients:'Patients',patient:'Patient record',appointments:'Appointments',requests:'Patient requests',homevisits:'Home visits',inventory:'Inventory & medicines',billing:'Billing',ai:'AI assistant',visitors:'Visitors & gate',users:'Staff accounts',settings:'Settings'};
+const TITLES={dashboard:'Dashboard',patients:'Patients',patient:'Patient record',appointments:'Appointments',requests:'Patient requests',homevisits:'Home visits',lab:'Laboratory',inventory:'Inventory & medicines',billing:'Billing',ai:'AI assistant',visitors:'Visitors & gate',users:'Staff accounts',settings:'Settings'};
 function buildNav(){
   const nNew=(db.requests||[]).filter(r=>r.status==='New').length;
   $('#nav').innerHTML=Object.keys(PERM).filter(can).map(m=>`<button data-act="nav" data-v="${m}"><svg class="ic" viewBox="0 0 24 24">${IC[m]}</svg>${TITLES[m].split(' &')[0]}${m==='requests'&&nNew?`<span class="pill bad" style="margin-left:auto">${nNew}</span>`:''}</button>`).join('');
@@ -389,6 +577,30 @@ function barChart(vals,labels,fmt=v=>v){
   const W=420,H=150,pl=8,pb=22,pt=16,n=vals.length,max=Math.max(...vals,1),bw=(W-pl*2)/n;
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Bar chart"><line class="g" x1="${pl}" x2="${W-pl}" y1="${H-pb}" y2="${H-pb}"/>`+
     vals.map((v,i)=>{const h=(H-pb-pt)*v/max,x=pl+i*bw+bw*.18,w=bw*.64;return `<rect class="b" x="${x}" y="${H-pb-h}" width="${w}" height="${Math.max(h,v?1.5:0)}" rx="3"/><text class="v" x="${x+w/2}" y="${H-pb-h-4}" text-anchor="middle">${v?fmt(v):''}</text><text class="t" x="${x+w/2}" y="${H-6}" text-anchor="middle">${esc(labels[i])}</text>`}).join('')+`</svg>`;
+}
+
+function areaChart(vals,labels,fmt=v=>v){
+  const W=420,H=150,pl=8,pb=22,pt=18,n=vals.length,max=Math.max(...vals,1),step=n>1?(W-pl*2)/(n-1):0;
+  const X=i=>pl+(n>1?i*step:(W-pl*2)/2),Y=v=>H-pb-(H-pb-pt)*v/max;
+  const pts=vals.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1));
+  const every=Math.ceil(n/7);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Line chart"><line class="g" x1="${pl}" x2="${W-pl}" y1="${H-pb}" y2="${H-pb}"/>`+
+   `<polygon class="ar" points="${X(0).toFixed(1)},${H-pb} ${pts.join(' ')} ${X(n-1).toFixed(1)},${H-pb}"/><polyline class="ln" points="${pts.join(' ')}"/>`+
+   vals.map((v,i)=>`<circle class="dot" cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="4"><title>${esc(labels[i])}: ${fmt(v)}</title></circle>${i%every===0||i===n-1?`<text class="t" x="${X(i).toFixed(1)}" y="${H-6}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${esc(labels[i])}</text>`:''}${v===max&&v>0?`<text class="v" x="${X(i).toFixed(1)}" y="${Y(v)-9}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${fmt(v)}</text>`:''}`).join('')+`</svg>`;
+}
+function donutChart(items,centre,cf){
+  const cp=cf||(v=>v);
+  const tot=sum(items.map(x=>x.v));
+  if(!tot)return empty('No data yet.');
+  const R=44,C=2*Math.PI*R;let off=0;
+  const arcs=items.filter(x=>x.v>0).map((x,i)=>{const len=C*x.v/tot,a=`<circle class="ring" cx="70" cy="70" r="${R}" stroke="var(--s${items.indexOf(x)+1})" stroke-dasharray="${Math.max(len-2,0.5).toFixed(2)} ${(C-Math.max(len-2,0.5)).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}" transform="rotate(-90 70 70)"><title>${esc(x.l)}: ${x.v}</title></circle>`;off+=len;return a}).join('');
+  return `<div class="donutw"><svg viewBox="0 0 140 140" role="img" aria-label="Donut chart">${arcs}<text x="70" y="70" text-anchor="middle" font-size="${cf?16:22}" font-weight="700">${cp(tot)}</text><text x="70" y="88" text-anchor="middle" font-size="10" style="fill:var(--muted)">${esc(centre||'total')}</text></svg>
+  <div class="leg">${items.map((x,i)=>`<div><i style="background:var(--s${i+1})"></i><span>${esc(x.l)}</span><b>${cp(x.v)} <span class="muted sm">(${Math.round(x.v/tot*100)}%)</span></b></div>`).join('')}</div></div>`;
+}
+function hbars(items,fmt=v=>v){
+  if(!items.length)return empty('No data yet.');
+  const max=Math.max(...items.map(x=>x.v),1);
+  return `<div class="viz">${items.map(x=>`<div class="hb"><div class="lab"><span>${esc(x.l)}</span><b>${fmt(x.v)}${x.note?` <span class="muted sm">${esc(x.note)}</span>`:''}</b></div><div class="tr"><span class="${x.tone||''}" style="width:${Math.max(x.v/max*100,2).toFixed(1)}%"></span></div></div>`).join('')}</div>`;
 }
 
 /* ============ Ollama ============ */
@@ -439,6 +651,9 @@ async function checkAI(){
   chip.style.cursor='pointer';chip.style.border='0';
 }
 function patientContext(p){
+  return patientContext0(p)+labContext(p)
+}
+function patientContext0(p){
   if(!p)return 'No patient record selected.';
   const vs=db.visits.filter(v=>v.patientId===p.id).sort((a,b)=>b.date<a.date?-1:1).slice(0,5);
   return `Age ${ageOf(p.dob)}, sex ${p.sex}. Blood group ${p.blood||'unknown'}. Allergies: ${p.allergies||'none recorded'}. Chronic conditions: ${p.chronic||'none recorded'}.\nRecent visits:\n`+(vs.map(v=>`- ${v.date}: ${v.complaint}; diagnosis: ${v.diagnosis}${v.admitted?' (admitted)':''}`).join('\n')||'- none');
@@ -463,29 +678,123 @@ V.dashboard=()=>{
     <div class="kpi"><span>Appointments today</span><b>${up.filter(a=>a.date===t).length}</b></div>
     <div class="kpi ${low.length?'alert':''}"><span>Stock alerts</span><b>${low.length}</b></div>
     <div class="kpi"><span>Outstanding bills</span><b>${money(out)}</b></div></div>
+  <div class="bar" style="margin:0 0 12px"><span class="grow"></span><button class="btn" data-act="printCharts">Print dashboard report</button></div>
   <div class="cols">
     <section class="card"><header><h2>Upcoming appointments</h2><button class="btn sm" data-act="nav" data-v="appointments">View all</button></header>
       ${up.length?`<div class="list">${up.slice(0,6).map(a=>`<div class="row"><div><b>${esc(pname(a.patientId))}</b><div class="muted sm">${esc(a.reason)} · ${esc(docName(a.doctorId))}</div></div><div class="right nowrap"><b>${a.time}</b><div class="muted sm">${a.date===t?'Today':fdate(a.date)}</div></div></div>`).join('')}</div>`:empty('No upcoming appointments.')}</section>
     <section class="card"><header><h2>Collected, last 7 days</h2></header>${barChart(coll,labels,v=>v>=1000?Math.round(v/1000)+'k':v)}<p class="muted sm" style="margin:8px 0 0">Payments received per day (${esc(db.settings.currency)}).</p></section>
     <section class="card"><header><h2>Currently admitted</h2></header>
       ${adm.length?`<div class="list">${adm.map(v=>`<div class="row"><div><b>${esc(pname(v.patientId))}</b><div class="muted sm">${esc(v.diagnosis)}</div></div><span class="muted sm nowrap">Day ${dayDiff(v.date,t)+1}</span></div>`).join('')}</div>`:empty('No inpatients.')}</section>
+    ${chartDefs().map(chartCard).join('')}
     ${opsCard()}
     ${can('inventory')?`<section class="card"><header><h2>Stock alerts</h2><button class="btn sm" data-act="nav" data-v="inventory">Inventory</button></header>
       ${low.length?`<div class="list">${low.slice(0,6).map(m=>{const s=stockState(m);return `<div class="row"><div><b>${esc(m.name)}</b><div class="muted sm">${m.stock} ${esc(m.unit)} left · reorder at ${m.reorder}</div></div>${pill(s[0],s[1])}</div>`}).join('')}</div>`:empty('All stock levels are healthy.')}</section>`:''}
   </div>`;
 };
 
+function chartDefs(){
+  const out=[],cur=db.settings.currency,k1=v=>v>=1000?Math.round(v/1000)+'k':v;
+  const days14=[...Array(14)].map((_,i)=>plus(i-13)),lb14=days14.map(d=>d.slice(8));
+  if(isClin()){
+    const vv=days14.map(d=>db.visits.filter(v=>v.date===d).length);
+    out.push({k:'visits',title:'Patient visits, last 14 days',html:areaChart(vv,lb14),note:sum(vv)+' visits recorded. Day of the month along the bottom.',colA:'Date',colB:'Visits',rows:days14.map((d,i)=>[fdate(d),vv[i]])});
+    const ag=[['Children (0–12)',0,12],['Youth (13–39)',13,39],['Adults (40–59)',40,59],['Seniors (60+)',60,200]].map(a=>({l:a[0],v:db.patients.filter(p=>{const g=ageOf(p.dob);return g>=a[1]&&g<=a[2]}).length}));
+    out.push({k:'age',title:'Patients by age',html:donutChart(ag,'patients'),colA:'Age group',colB:'Patients',rows:ag.map(x=>[x.l,x.v])});
+    const dx={};db.visits.forEach(v=>{const k=(v.diagnosis||'').trim();if(k)dx[k]=(dx[k]||0)+1});
+    const top=Object.entries(dx).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>({l:x[0],v:x[1]}));
+    out.push({k:'dx',title:'Most common diagnoses',html:hbars(top),colA:'Diagnosis',colB:'Visits',rows:top.map(x=>[x.l,x.v])});
+  }
+  if(can('inventory')){
+    const low=db.medicines.slice().sort((a,b)=>a.stock/Math.max(a.reorder,1)-b.stock/Math.max(b.reorder,1)).slice(0,6).map(m=>{const s=stockState(m);return{l:m.name,v:m.stock,note:m.unit,tone:s[1]==='ok'?'':s[1]==='bad'?'low':'mid',st:s[0]}});
+    out.push({k:'stock',title:'Lowest stock',nav:'inventory',html:hbars(low),note:'Orange or amber means reorder soon.',colA:'Medicine',colB:'In stock',rows:low.map(x=>[x.l,x.v+' '+x.note+' ('+x.st+')'])});
+  }
+  if(can('billing')){
+    const rv=days14.map(d=>sum(db.invoices.flatMap(i=>i.payments).filter(p=>p.date===d).map(p=>p.amount)));
+    out.push({k:'money',title:'Money collected, 14 days',html:areaChart(rv,lb14,k1),note:'Total '+money(sum(rv))+'.',colA:'Date',colB:'Collected ('+cur+')',rows:days14.map((d,i)=>[fdate(d),money(rv[i])])});
+    const pm={};db.invoices.flatMap(i=>i.payments).forEach(p=>pm[p.method]=(pm[p.method]||0)+p.amount);
+    const items=Object.entries(pm).sort((a,b)=>b[1]-a[1]),four=items.slice(0,3).map(x=>({l:x[0],v:Math.round(x[1])}));
+    if(items.length>3)four.push({l:'Other',v:Math.round(sum(items.slice(3).map(x=>x[1])))});
+    out.push({k:'pay',title:'How patients pay',html:four.length?donutChart(four,cur,v=>v>=1e6?(v/1e6).toFixed(2).replace(/\.?0+$/,'')+'M':k1(v)):empty('No payments yet.'),colA:'Method',colB:'Amount ('+cur+')',rows:four.map(x=>[x.l,money(x.v)])});
+  }
+  if(can('visitors')){
+    const d7=days14.slice(7),vc=d7.map(d=>db.visitors.filter(v=>iso(new Date(v.timeIn))===d).length);
+    out.push({k:'visitors',title:'Visitors per day',html:sum(vc)?barChart(vc,d7.map(d=>new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'short'}))):empty('No visitors in the last 7 days.'),colA:'Date',colB:'Visitors',rows:d7.map((d,i)=>[fdate(d),vc[i]])});
+  }
+  return out;
+}
+function chartCard(c){
+  return `<section class="card"><header><h2>${esc(c.title)}</h2><div class="hv-acts">${c.nav?`<button class="btn sm" data-act="nav" data-v="${c.nav}">Open</button>`:''}<button class="btn sm" data-act="printChart" data-k="${c.k}">Print</button></div></header>${c.html}${c.note?`<p class="muted sm" style="margin:8px 0 0">${esc(c.note)}</p>`:''}</section>`;
+}
+function chartPrintHTML(list){
+  return letterhead()+`<h2 style="margin:0 0 4px">${list.length>1?'Dashboard report':esc(list[0].title)}</h2><p style="margin:0 0 14px">Printed ${fdate(today())} by ${esc(me.name)}</p>`+
+   list.map(c=>`<section style="page-break-inside:avoid;margin:0 0 20px"><h3 style="margin:0 0 6px">${esc(c.title)}</h3><div style="max-width:520px">${c.html}</div>${c.rows&&c.rows.length?`<table style="width:100%;margin-top:8px;border-collapse:collapse"><thead><tr><th align="left">${esc(c.colA||'Item')}</th><th align="right">${esc(c.colB||'Value')}</th></tr></thead><tbody>${c.rows.map(r=>`<tr><td>${esc(r[0])}</td><td align="right">${esc(r[1])}</td></tr>`).join('')}</tbody></table>`:''}</section>`).join('');
+}
+
+/* ---- data clean-up (delete) ---- */
+const PCOLL=['visits','appointments','invoices','rx','labs','docs','homeVisits'];
+function patientData(ids){
+  const set=new Set(ids),o={patients:db.patients.filter(p=>set.has(p.id))};
+  PCOLL.forEach(k=>o[k]=(db[k]||[]).filter(x=>set.has(x.patientId)));
+  return o;
+}
+function purgePatients(ids){
+  const set=new Set(ids);
+  db.patients=db.patients.filter(p=>!set.has(p.id));
+  PCOLL.forEach(k=>{if(db[k])db[k]=db[k].filter(x=>!set.has(x.patientId))});
+  (db.requests||[]).forEach(r=>{if(set.has(r.patientId))r.patientId=''});
+  db.visitors.forEach(v=>{if(set.has(v.patientId)){v.patientId='';v.host=v.host||'(record removed)'}});
+}
+const stamp=()=>new Date().toISOString().slice(0,10);
+function askDeletePatients(ids,title){
+  if(me.role!=='admin'){toast('Only the admin can delete patient records.','bad');return}
+  const d=patientData(ids),t=today();
+  const owed=sum(d.invoices.map(invBal)),notHome=d.patients.filter(p=>!p.sentHome).length;
+  const adm=d.visits.filter(v=>v.admitted&&!v.discharge).length,up=d.appointments.filter(a=>a.status==='Scheduled'&&a.date>=t).length;
+  const warn=[];
+  if(notHome)warn.push(notHome+' patient'+(notHome>1?'s are':' is')+' not marked as sent home.');
+  if(adm)warn.push(adm+' still admitted to the ward.');
+  if(owed>0)warn.push('Unpaid bills of '+money(owed)+' will be lost.');
+  if(up)warn.push(up+' upcoming appointment'+(up>1?'s':'')+' will be cancelled.');
+  openModal(title,`<p style="margin:0">This permanently removes <b>${d.patients.length} patient${d.patients.length>1?'s':''}</b> with ${d.visits.length} visit${d.visits.length===1?'':'s'}, ${d.appointments.length} appointment${d.appointments.length===1?'':'s'}, ${d.invoices.length} invoice${d.invoices.length===1?'':'s'}, ${d.rx.length} prescription${d.rx.length===1?'':'s'}, ${d.labs.length} lab order${d.labs.length===1?'':'s'}.</p>
+  ${d.patients.length<=6?`<p class="muted" style="margin:0">${d.patients.map(p=>esc(p.name)).join(', ')}</p>`:''}
+  ${warn.length?`<div class="warn-box" style="border-left:3px solid var(--bad);padding:6px 12px;color:var(--bad)">${warn.map(esc).join('<br>')}</div>`:''}
+  <label class="chk"><input type="checkbox" name="backup" checked style="width:auto"><span>Save a backup file to my phone first (recommended)</span></label>
+  <label class="chk red"><input type="checkbox" name="sure" required style="width:auto"><span>I understand this cannot be undone</span></label>`,
+  {submit:'Delete permanently',onSubmit:fd=>{
+    if(fd.has('backup'))download('caredesk-patients-backup-'+stamp()+'.json',JSON.stringify({exported:new Date().toISOString(),clinic:db.settings.clinic,...d},null,1),'application/json');
+    purgePatients(ids);save();toast(d.patients.length+' patient record'+(d.patients.length>1?'s':'')+' deleted.');
+    if(S.view==='patient')go('patients');else render();
+  }});
+}
+function askDeleteVisitors(){
+  if(!canBlock()){toast('Only the admin or gate officer can clear the log.','bad');return}
+  const n=db.visitors.filter(v=>v.timeOut).length;
+  openModal('Clear visitor records',`<p style="margin:0">Removes visitors who have already <b>checked out</b>. People still inside are never removed.</p>
+  ${sel('Remove records older than','days',[[0,'All checked-out visitors ('+n+')'],[7,'7 days'],[30,'30 days'],[90,'90 days']],0)}
+  <label class="chk"><input type="checkbox" name="backup" checked style="width:auto"><span>Save the visitor list (CSV) to my phone first</span></label>
+  <label class="chk red"><input type="checkbox" name="sure" required style="width:auto"><span>I understand this cannot be undone</span></label>`,
+  {submit:'Delete records',onSubmit:fd=>{
+    const days=+fd.get('days'),cut=days?plus(-days):'9999-12-31';
+    const gone=db.visitors.filter(v=>v.timeOut&&(days===0||iso(new Date(v.timeIn))<cut));
+    if(!gone.length){toast('No records match.');return false}
+    if(fd.has('backup'))download('visitors-backup-'+stamp()+'.csv',csv([['Date','Name','Phone','ID number','Purpose','Time in','Time out','Badge'],...gone.map(v=>[iso(new Date(v.timeIn)),v.name,v.phone,v.idNumber,v.purpose,v.timeIn,v.timeOut,v.badge])]),'text/csv');
+    const set=new Set(gone.map(v=>v.id));db.visitors=db.visitors.filter(v=>!set.has(v.id));save();toast(gone.length+' visitor record'+(gone.length>1?'s':'')+' deleted.');render();
+  }});
+}
+
 /* ---- patients ---- */
 function patientRows(){
-  const q=S.q.toLowerCase();
-  const list=db.patients.filter(p=>!q||(p.name+p.phone+p.id).toLowerCase().includes(q));
-  if(!list.length)return empty('No patients match your search.');
-  return `<div class="tw"><table><thead><tr><th>ID</th><th>Name</th><th>Age / sex</th><th>Phone</th><th>Conditions</th><th>Last visit</th></tr></thead><tbody>${list.map(p=>{
+  const q=S.q.toLowerCase(),f=S.pfilter||'active';
+  const list=db.patients.filter(p=>q?(p.name+p.phone+p.id).toLowerCase().includes(q):f==='all'||(f==='home'?p.sentHome:!p.sentHome));
+  if(!list.length)return empty(q?'No patients match your search.':f==='home'?'Nobody has been marked as sent home yet.':'No patients here.');
+  const adm=me.role==='admin';
+  return `<div class="tw"><table><thead><tr><th>ID</th><th>Name</th><th>Age / sex</th><th>Phone</th><th>Conditions</th><th>Last visit</th>${adm?'<th></th>':''}</tr></thead><tbody>${list.map(p=>{
     const lv=db.visits.filter(v=>v.patientId===p.id).map(v=>v.date).sort().pop();
-    return `<tr class="click" data-act="openPatient" data-id="${p.id}" tabindex="0"><td class="mono">${p.id}</td><td><b>${esc(p.name)}</b></td><td>${ageOf(p.dob)} · ${p.sex}</td><td class="nowrap">${esc(p.phone)}</td><td>${p.chronic?esc(p.chronic):'<span class="muted">—</span>'}</td><td class="nowrap">${fdate(lv)}</td></tr>`}).join('')}</tbody></table></div>`;
+    return `<tr class="click" data-act="openPatient" data-id="${p.id}" tabindex="0"><td class="mono">${p.id}</td><td><b>${esc(p.name)}</b>${p.sentHome?'<div>'+pill('Sent home '+fdate(p.sentHome),'ok')+'</div>':''}</td><td>${ageOf(p.dob)} · ${p.sex}</td><td class="nowrap">${esc(p.phone)}</td><td>${p.chronic?esc(p.chronic):'<span class="muted">—</span>'}</td><td class="nowrap">${fdate(lv)}</td>${adm?`<td class="right"><button class="btn sm bad" data-act="delPatient" data-id="${p.id}" aria-label="Delete ${esc(p.name)}">Delete</button></td>`:''}</tr>`}).join('')}</tbody></table></div>`;
 }
-V.patients=()=>`<div class="bar"><input type="search" id="q" data-filter="patients" placeholder="Search by name, phone or ID" aria-label="Search patients"><span class="grow"></span><button class="btn pri" data-act="editPatient">Register patient</button></div>
-  <div class="card" style="padding:6px" id="plist">${patientRows()}</div>`;
+V.patients=()=>{const f=S.pfilter||'active',nh=db.patients.filter(p=>p.sentHome).length;return `<div class="tabs" role="tablist">${[['active','Active ('+(db.patients.length-nh)+')'],['home','Sent home ('+nh+')'],['all','All ('+db.patients.length+')']].map(x=>`<button role="tab" aria-selected="${f===x[0]}" data-act="pfilter" data-f="${x[0]}">${x[1]}</button>`).join('')}</div>
+  <div class="bar"><input type="search" id="q" data-filter="patients" placeholder="Search by name, phone or ID" aria-label="Search patients"><span class="grow"></span>${me.role==='admin'&&f==='home'&&nh?`<button class="btn bad" data-act="delHome">Delete all sent home (${nh})</button>`:''}<button class="btn pri" data-act="editPatient">Register patient</button></div>
+  <div class="card" style="padding:6px" id="plist">${patientRows()}</div>`};
 const filters={patients:()=>{$('#plist').innerHTML=patientRows()},medicines:()=>{$('#mlist').innerHTML=medRows()},visitors:()=>{$('#vlist').innerHTML=vLogRows()}};
 
 function patientForm(p={}){
@@ -514,6 +823,8 @@ V.patient=()=>{
   const tags=s=>s?s.split(',').map(x=>x.trim()).filter(Boolean):[];
   return `<div class="bar"><button class="btn" data-act="nav" data-v="patients">← Patients</button><span class="grow"></span>
     <button class="btn" data-act="editPatient" data-id="${p.id}">Edit</button>
+    ${isClin()||me.role==='receptionist'?(p.sentHome?`<button class="btn" data-act="undoHome" data-id="${p.id}">Re-open file</button>`:`<button class="btn" data-act="sendHome" data-id="${p.id}">Sent home / healed</button>`):''}
+    ${me.role==='admin'?`<button class="btn bad" data-act="delPatient" data-id="${p.id}">Delete</button>`:''}
     <button class="btn" data-act="newAppt" data-pid="${p.id}">Book appointment</button>
     ${can('homevisits')?`<button class="btn" data-act="newHome" data-pid="${p.id}">Home visit</button>`:''}${p.phone?`<button class="btn" data-act="msgPatient" data-id="${p.id}">Message</button>`:''}
     ${can('billing')?`<button class="btn" data-act="newInvoice" data-pid="${p.id}">New invoice</button>`:''}
@@ -526,6 +837,7 @@ V.patient=()=>{
     <section class="card"><header><h2>Clinical visits</h2>${isClin()?`<button class="btn sm pri" data-act="newVisit" data-id="${p.id}">Add visit note</button>`:''}</header>
       ${!isClin()?'<p class="muted">Clinical notes are visible to clinical staff only.</p>':vs.length?`<div class="list">${vs.map(v=>`<div class="row" style="align-items:flex-start"><div><b>${esc(v.diagnosis||v.complaint)}</b><div class="muted sm">${esc(v.complaint)}${v.notes?' · '+esc(v.notes):''}</div><div class="muted sm">${esc(v.doctor)}</div></div><div class="right nowrap sm">${fdate(v.date)}${v.admitted?`<div>${pill(v.discharge?'Admitted':'In ward',v.discharge?'gray':'warn')}</div>`:''}</div></div>`).join('')}</div>`:empty('No visits recorded.')}</section>
     <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      ${isClin()?patientClinicalCards(p):''}
       <section class="card"><header><h2>Appointments</h2></header>${ap.length?`<div class="list">${ap.slice(0,6).map(a=>`<div class="row"><div><b>${fdate(a.date)} · ${a.time}</b><div class="muted sm">${esc(a.reason)} · ${esc(docName(a.doctorId))}</div></div>${pill(a.status)}</div>`).join('')}</div>`:empty('No appointments.')}</section>
       ${can('billing')?`<section class="card"><header><h2>Invoices</h2></header>${iv.length?`<div class="list">${iv.map(i=>`<div class="row"><div><b class="mono">${i.id}</b><div class="muted sm">${fdate(i.date)} · ${money(invTotal(i))}</div></div><div class="right">${pill(invStatus(i))}${invBal(i)>0?`<div class="sm muted">Owes ${money(invBal(i))}</div>`:''}</div></div>`).join('')}</div>`:empty('No invoices.')}</section>`:''}
     </div></div>`;
@@ -540,12 +852,13 @@ function newVisit(pid){
 /* ---- appointments ---- */
 V.appointments=()=>{
   const f=S.afilter||'upcoming',t=today();
+  if(f==='recall')return recallView();
   let list=db.appointments.slice();
   if(f==='upcoming')list=list.filter(a=>a.date>=t&&a.status==='Scheduled');
   else if(f==='today')list=list.filter(a=>a.date===t);
   else if(f==='past')list=list.filter(a=>a.date<t);
   list.sort((a,b)=>f==='past'?(b.date+b.time).localeCompare(a.date+a.time):(a.date+a.time).localeCompare(b.date+b.time));
-  return `<div class="bar"><div class="tabs" style="margin:0;border:0" role="tablist">${[['upcoming','Upcoming'],['today','Today'],['past','Past'],['all','All']].map(x=>`<button role="tab" aria-selected="${f===x[0]}" data-act="afilter" data-f="${x[0]}">${x[1]}</button>`).join('')}</div><span class="grow"></span><button class="btn pri" data-act="newAppt">Schedule appointment</button></div>
+  return `<div class="bar"><div class="tabs" style="margin:0;border:0" role="tablist">${[['upcoming','Upcoming'],['today','Today'],['past','Past'],['all','All'],['recall','Due for review']].map(x=>`<button role="tab" aria-selected="${f===x[0]}" data-act="afilter" data-f="${x[0]}">${x[1]}</button>`).join('')}</div><span class="grow"></span><button class="btn pri" data-act="newAppt">Schedule appointment</button></div>
   <div class="card" style="padding:6px">${list.length?`<div class="tw"><table><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Doctor</th><th>Reason</th><th>Status</th><th></th></tr></thead><tbody>${list.map(a=>`<tr><td class="nowrap">${a.date===t?'<b>Today</b>':fdate(a.date)}</td><td class="mono">${a.time}</td><td><a href="#patient/${a.patientId}" data-act="openPatient" data-id="${a.patientId}">${esc(pname(a.patientId))}</a></td><td>${esc(docName(a.doctorId))}</td><td>${esc(a.reason)}</td><td>${pill(a.status)}</td>
     <td class="right nowrap">${a.status==='Scheduled'?`<button class="btn sm" data-act="apptMsg" data-id="${a.id}">Message</button> <button class="btn sm" data-act="apptStatus" data-id="${a.id}" data-s="Completed">Complete</button> <button class="btn sm" data-act="apptStatus" data-id="${a.id}" data-s="No-show">No-show</button> <button class="btn sm bad" data-act="apptStatus" data-id="${a.id}" data-s="Cancelled">Cancel</button>`:''}</td></tr>`).join('')}</tbody></table></div>`:empty('No appointments in this view.')}</div>`;
 };
@@ -568,7 +881,7 @@ function medRows(){
   const list=db.medicines.filter(m=>!q||(m.name+m.category).toLowerCase().includes(q));
   if(!list.length)return empty('No medicines match.');
   return `<div class="tw"><table><thead><tr><th>Medicine</th><th>Category</th><th class="num">Stock</th><th class="num">Reorder at</th><th class="num">Price</th><th>Expiry</th><th>Status</th><th></th></tr></thead><tbody>${list.map(m=>{const s=stockState(m);return `<tr><td><b>${esc(m.name)}</b></td><td>${esc(m.category)}</td><td class="num">${m.stock} <span class="muted sm">${esc(m.unit)}</span></td><td class="num">${m.reorder}</td><td class="num">${money(m.price)}</td><td class="nowrap">${fdate(m.expiry)}</td><td>${pill(s[0],s[1])}</td>
-    <td class="right nowrap"><button class="btn sm" data-act="dispense" data-id="${m.id}" ${m.stock<=0?'disabled':''}>Dispense</button> ${me.role!=='doctor'?`<button class="btn sm" data-act="restock" data-id="${m.id}">Restock</button>`:''} ${me.role==='admin'?`<button class="btn sm" data-act="editMed" data-id="${m.id}">Edit</button>`:''}</td></tr>`}).join('')}</tbody></table></div>`;
+    <td class="right nowrap"><button class="btn sm" data-act="dispense" data-id="${m.id}" ${m.stock<=0?'disabled':''}>Dispense</button> ${me.role!=='doctor'?`<button class="btn sm" data-act="restock" data-id="${m.id}">Restock</button>`:''} ${me.role==='admin'?`<button class="btn sm" data-act="editMed" data-id="${m.id}">Edit</button> <button class="btn sm bad" data-act="delMed" data-id="${m.id}">Delete</button>`:''}</td></tr>`}).join('')}</tbody></table></div>`;
 }
 V.inventory=()=>`<div class="bar"><input type="search" id="q" data-filter="medicines" placeholder="Search medicines" aria-label="Search medicines"><span class="grow"></span>${me.role==='admin'?'<button class="btn pri" data-act="editMed">Add medicine</button>':''}</div><div class="card" style="padding:6px" id="mlist">${medRows()}</div>`;
 function editMed(id){
@@ -593,7 +906,7 @@ function dispense(id){
     if(q>m.stock){toast('Not enough stock.','bad');return false}
     m.stock-=q;
     if(pid){let inv=db.invoices.filter(i=>i.patientId===pid&&invBal(i)>0).sort((a,b)=>b.date.localeCompare(a.date))[0];
-      if(!inv){inv={id:'INV-'+(1001+db.invoices.length),patientId:pid,date:today(),items:[],payments:[]};db.invoices.push(inv)}
+      if(!inv){inv={id:invId(),patientId:pid,date:today(),items:[],payments:[]};db.invoices.push(inv)}
       inv.items.push({desc:m.name,qty:q,price:m.price})}
     save();toast(`Dispensed ${q} ${m.unit}.`);render();
   }});
@@ -615,7 +928,7 @@ function newInvoice(pid){
   openModal('New invoice',`${sel('Patient','pid',patOpts(),pid||'')}<datalist id="svc">${Object.keys(SERVICES).map(s=>`<option value="${s}">`).join('')}</datalist><div class="lines" id="lines">${lineRow('Consultation',1,SERVICES.Consultation)}</div><button type="button" class="btn sm" data-act="addLine" style="align-self:flex-start">+ Add line</button>`,{wide:true,submit:'Create invoice',onSubmit:fd=>{
     const d=fd.getAll('desc'),q=fd.getAll('qty'),p=fd.getAll('price');
     const items=d.map((x,i)=>({desc:x,qty:+q[i],price:+p[i]}));
-    const inv={id:'INV-'+(1001+db.invoices.length),patientId:fd.get('pid'),date:today(),items,payments:[]};
+    const inv={id:invId(),patientId:fd.get('pid'),date:today(),items,payments:[]};
     db.invoices.push(inv);save();toast('Invoice created.');render();viewInvoice(inv.id);return false;
   }});
 }
@@ -624,8 +937,8 @@ function viewInvoice(id){
   openModal('Invoice '+i.id,`<div class="row" style="border:0;padding:0"><div><b>${esc(p?.name)}</b><div class="muted sm">${fdate(i.date)}</div></div>${pill(invStatus(i))}</div>
   <div class="tw"><table><thead><tr><th>Item</th><th class="num">Qty</th><th class="num">Price</th><th class="num">Amount</th></tr></thead><tbody>${i.items.map(x=>`<tr><td>${esc(x.desc)}</td><td class="num">${x.qty}</td><td class="num">${money(x.price)}</td><td class="num">${money(x.qty*x.price)}</td></tr>`).join('')}
   <tr><td colspan="3" class="right"><b>Total</b></td><td class="num"><b>${money(invTotal(i))}</b></td></tr><tr><td colspan="3" class="right">Paid</td><td class="num">${money(invPaid(i))}</td></tr><tr><td colspan="3" class="right"><b>Balance</b></td><td class="num"><b>${money(invBal(i))}</b></td></tr></tbody></table></div>
-  ${i.payments.length?`<h4>Payments</h4><div class="list">${i.payments.map(x=>`<div class="row"><span>${fdate(x.date)} · ${esc(x.method)}</span><b>${money(x.amount)}</b></div>`).join('')}</div>`:''}
-  ${invBal(i)>0?`<h4>Record payment</h4><div class="grid3">${fld('Amount','amount',invBal(i),'number',`min="1" max="${invBal(i)}"`)}${sel('Method','method',['Cash','Mobile money','Card','Insurance'])}<div class="f"><span>&nbsp;</span><button class="btn pri" data-act="pay" data-id="${i.id}" type="button">Add payment</button></div></div>`:''}
+  ${i.payments.length?`<h4>Payments</h4><div class="list">${i.payments.map((x,k)=>`<div class="row"><div><b>${money(x.amount)}</b><div class="muted sm">${fdate(x.date)} · ${esc(x.method)}${x.ref?' · ref '+esc(x.ref):''}</div></div><div class="right nowrap">${hb('Receipt','rcPrint',i.id,'','data-i="'+k+'"')} ${hb('WhatsApp','rcMsg',i.id,'','data-i="'+k+'"')}</div></div>`).join('')}</div>`:''}
+  ${invBal(i)>0?`<h4>Record payment</h4><div class="grid3">${fld('Amount','amount',invBal(i),'number',`min="1" max="${invBal(i)}"`)}${sel('Method','method',PAYMETHODS)}${fld('Transaction ref (mobile money, bank, card)','ref','','text','placeholder="e.g. MP240101.1234.A56789"')}</div><button class="btn pri" data-act="pay" data-id="${i.id}" type="button" style="align-self:flex-start">Add payment</button>`:''}
   <button type="button" class="btn" data-act="printInvoice" data-id="${i.id}" style="align-self:flex-start">Print invoice</button>`,{wide:true,foot:false});
 }
 function invoiceHTML(i){
@@ -736,14 +1049,14 @@ function vLogRows(){
   const q=(S.q||'').toLowerCase();
   const list=db.visitors.filter(v=>!q||(v.name+v.phone+v.idNumber+v.badge).toLowerCase().includes(q)).sort((a,b)=>b.timeIn.localeCompare(a.timeIn)).slice(0,300);
   if(!list.length)return empty('No visitors recorded.');
-  return `<div class="tw"><table><thead><tr><th>Date</th><th>Visitor</th><th>ID</th><th>Visiting</th><th>Purpose</th><th>In</th><th>Out</th><th>Badge</th><th>Checked in by</th></tr></thead><tbody>${list.map(v=>`<tr><td class="nowrap">${fdate(iso(new Date(v.timeIn)))}</td><td><b>${esc(v.name)}</b><div class="muted sm">${esc(v.phone)}</div></td><td class="sm">${esc(v.idType)}<br>${esc(v.idNumber)}</td><td>${esc(vTarget(v))}</td><td>${esc(v.purpose)}${v.override?`<div class="sm muted">Override: ${esc(v.override)}</div>`:''}</td><td class="nowrap">${vTime(v.timeIn)}</td><td class="nowrap">${v.timeOut?vTime(v.timeOut):pill('Inside','warn')}</td><td class="mono">${esc(v.badge)}</td><td class="sm">${esc(v.by)}</td></tr>`).join('')}</tbody></table></div>`;
+  return `<div class="tw"><table><thead><tr><th>Date</th><th>Visitor</th><th>ID</th><th>Visiting</th><th>Purpose</th><th>In</th><th>Out</th><th>Badge</th><th>Checked in by</th>${canBlock()?'<th></th>':''}</tr></thead><tbody>${list.map(v=>`<tr><td class="nowrap">${fdate(iso(new Date(v.timeIn)))}</td><td><b>${esc(v.name)}</b><div class="muted sm">${esc(v.phone)}</div></td><td class="sm">${esc(v.idType)}<br>${esc(v.idNumber)}</td><td>${esc(vTarget(v))}</td><td>${esc(v.purpose)}${v.override?`<div class="sm muted">Override: ${esc(v.override)}</div>`:''}</td><td class="nowrap">${vTime(v.timeIn)}</td><td class="nowrap">${v.timeOut?vTime(v.timeOut):pill('Inside','warn')}</td><td class="mono">${esc(v.badge)}</td><td class="sm">${esc(v.by)}</td>${canBlock()?`<td class="right">${v.timeOut?`<button class="btn sm bad" data-act="delVisitor" data-id="${v.id}">Delete</button>`:''}</td>`:''}</tr>`).join('')}</tbody></table></div>`;
 }
 V.visitors=()=>{
   const t=S.vtab||'now',act=vActive().sort((a,b)=>a.timeIn.localeCompare(b.timeIn));
   const td=db.visitors.filter(v=>iso(new Date(v.timeIn))===today()),late=act.filter(vOverdue).length;
   const tabs=`<div class="tabs" role="tablist">${[['now','On site now'],['log','Visitor log'],['blocked','Blocked list']].map(x=>`<button role="tab" aria-selected="${t===x[0]}" data-act="vtab" data-t="${x[0]}">${x[1]}</button>`).join('')}</div>`;
   const kp=`<div class="kpis"><div class="kpi"><span>On site now</span><b>${act.length}</b></div><div class="kpi"><span>Visitors today</span><b>${td.length}</b></div><div class="kpi ${late?'alert':''}"><span>Past visiting hours</span><b>${late}</b></div><div class="kpi"><span>Visiting hours</span><b style="font-size:20px">${esc(visitHoursText())}</b></div></div>`;
-  const top=`<div class="bar">${canGate()?'<button class="btn pri" data-act="regVisitor">Register visitor</button>':''}<span class="grow"></span>${t==='log'?'<button class="btn" data-act="exportVisitors">Export CSV</button>':''}${t==='blocked'&&canBlock()?'<button class="btn" data-act="addBlock">Block a person</button>':''}</div>`;
+  const top=`<div class="bar">${canGate()?'<button class="btn pri" data-act="regVisitor">Register visitor</button>':''}<span class="grow"></span>${t==='log'?'<button class="btn" data-act="exportVisitors">Export CSV</button>'+(canBlock()?'<button class="btn bad" data-act="clearVisitors">Clear old records</button>':''):''}${t==='blocked'&&canBlock()?'<button class="btn" data-act="addBlock">Block a person</button>':''}</div>`;
   let body='';
   if(t==='now'){
     body=act.length?`<div class="card" style="padding:6px"><div class="tw"><table><thead><tr><th>Badge</th><th>Visitor</th><th>Visiting</th><th>Purpose</th><th>In</th><th>Time inside</th><th></th></tr></thead><tbody>${act.map(v=>`<tr><td class="mono"><b>${esc(v.badge)}</b></td><td><b>${esc(v.name)}</b><div class="muted sm">${esc(v.phone)}</div></td><td>${esc(vTarget(v))}</td><td>${esc(v.purpose)}</td><td class="nowrap">${vTime(v.timeIn)}</td><td class="nowrap">${vDur(v)} ${vOverdue(v)?pill('Overdue','bad'):''}</td><td class="right nowrap">${canGate()?`<button class="btn sm" data-act="visitorBadge" data-id="${v.id}">Badge</button> <button class="btn sm pri" data-act="visitorOut" data-id="${v.id}">Check out</button>`:''}</td></tr>`).join('')}</tbody></table></div></div>`:`<div class="card">${empty('Nobody is inside right now.')}</div>`;
@@ -963,7 +1276,7 @@ function recordHome(id){
     const items=d.map((x,i)=>({desc:x.trim(),qty:+q[i]||1,price:+pr[i]||0})).filter(x=>x.desc);
     const vit=[['BP',o.bp],['Temp',o.temp&&o.temp+'°C'],['Pulse',o.pulse],['SpO₂',o.spo2&&o.spo2+'%'],['RR',o.rr],['Weight',o.wt&&o.wt+' kg']].filter(x=>x[1]).map(x=>x[0]+' '+x[1]).join(', ');
     db.visits.push({id:uid('V'),patientId:h.patientId,date:today(),doctor:me.name,complaint:h.reason,diagnosis:o.diagnosis,notes:'Home visit at '+h.address+'. Outcome: '+o.outcome+'.'+(vit?' '+vit+'.':'')+(o.notes?' '+o.notes:'')+(o.followUp?' Follow-up: '+o.followUp+'.':''),admitted:false,discharge:''});
-    if(items.length&&sum(items.map(x=>x.qty*x.price))>0){const inv={id:'INV-'+(1001+db.invoices.length),patientId:h.patientId,date:today(),items:items,payments:[]};db.invoices.push(inv);h.invoiceId=inv.id}
+    if(items.length&&sum(items.map(x=>x.qty*x.price))>0){const inv={id:invId(),patientId:h.patientId,date:today(),items:items,payments:[]};db.invoices.push(inv);h.invoiceId=inv.id}
     Object.assign(h,{status:'Completed',outcome:o.outcome,diagnosis:o.diagnosis,vitalsText:vit,notes:o.notes,followUp:o.followUp,doneAt:new Date().toISOString(),doneBy:me.name});
     save();toast(o.outcome==='Emergency transfer'?'Saved. Call the receiving hospital now.':'Home visit completed and added to the patient record.');render();
   }});
@@ -976,6 +1289,7 @@ function opsCard(){
   const hv=db.homeVisits.filter(h=>h.date===t&&hvOpen(h)).sort((a,b)=>a.time.localeCompare(b.time));
   return `<section class="card"><header><h2>Requests and home visits</h2></header>
   ${can('requests')?`<div class="row"><div><b>${nNew} new request${nNew===1?'':'s'}</b><div class="muted sm">From WhatsApp, calls and email</div></div><button class="btn sm" data-act="nav" data-v="requests">Open</button></div>`:''}
+  ${can('lab')?labRow():''}
   ${can('homevisits')?(hv.length?hv.slice(0,4).map(h=>`<div class="row"><div><b>${esc(pname(h.patientId))}</b><div class="muted sm">${esc(h.address)}</div></div><div class="right nowrap"><b>${h.time}</b><div>${pill(h.status,hvClass[h.status])}</div></div></div>`).join(''):`<div class="row"><span class="muted">No home visits today.</span><button class="btn sm" data-act="nav" data-v="homevisits">Home visits</button></div>`):''}</section>`;
 }
 
@@ -992,11 +1306,225 @@ function sampleOps(){
   return{requests:requests,homeVisits:homeVisits};
 }
 
+/* ---- clinical: prescriptions, laboratory, letters, review recall, receipts ---- */
+const canRx=()=>['admin','doctor'].includes(me.role);
+const PAYMETHODS=['Cash','MTN MoMo','Airtel Money','Card','Bank transfer','Insurance'];
+const REFMETHODS=['MTN MoMo','Airtel Money','Bank transfer','Card'];
+const letterhead=()=>{const s=db.settings;return `<div style="border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:14px"><div style="font:600 24px Georgia,serif">${esc(s.clinic)}</div><div style="font-size:13px">${[s.clinicPhone&&'Tel '+esc(s.clinicPhone),s.clinicEmail&&esc(s.clinicEmail),esc(s.hours||'')].filter(Boolean).join(' · ')}</div></div>`};
+const sigLine=name=>`<div style="margin-top:48px"><div style="border-top:1px solid #000;width:260px;padding-top:4px">${esc(name)}</div><div style="font-size:12px">Signature and stamp</div></div>`;
+const ptLine=p=>`<p><b>${esc(p.name)}</b> · ${ageOf(p.dob)} yrs · ${p.sex==='M'?'Male':'Female'} · ${esc(p.id)}${p.phone?' · '+esc(p.phone):''}</p>`;
+
+/* find or start an open invoice and add lines to it */
+function addToInvoice(pid,items){
+  let inv=db.invoices.filter(i=>i.patientId===pid&&invBal(i)>0).sort((a,b)=>b.date.localeCompare(a.date))[0];
+  if(!inv){inv={id:invId(),patientId:pid,date:today(),items:[],payments:[]};db.invoices.push(inv)}
+  items.forEach(x=>inv.items.push(x));return inv;
+}
+
+/* ---- prescriptions ---- */
+const FREQS=['Once daily','Twice daily','Three times daily','Four times daily','At night','Every 8 hours','As needed'];
+const ALLERGY_MAP={penicillin:['penicillin','amoxicillin','ampicillin','cloxacillin','flucloxacillin','amoxiclav','augmentin'],sulfa:['cotrimoxazole','co-trimoxazole','septrin','sulfamethoxazole','sulfadoxine','sulphadoxine','fansidar','bactrim'],sulph:['cotrimoxazole','co-trimoxazole','septrin','sulfamethoxazole','sulfadoxine','sulphadoxine','fansidar'],aspirin:['aspirin','ibuprofen','diclofenac','naproxen'],nsaid:['aspirin','ibuprofen','diclofenac','naproxen','indomethacin'],cephalosporin:['ceftriaxone','cefuroxime','cefixime','cephalexin','cefotaxime']};
+function allergyConflicts(p,drug){
+  const d=(drug||'').toLowerCase().trim(),out=[];if(!d)return out;
+  const w=d.split(/[\s\/]+/)[0];
+  (p.allergies||'').toLowerCase().split(',').map(x=>x.trim()).filter(Boolean).forEach(a=>{
+    if(d.includes(a)||(w.length>3&&a.includes(w))){out.push(a);return}
+    for(const k in ALLERGY_MAP)if(a.includes(k)&&ALLERGY_MAP[k].some(x=>d.includes(x))){out.push(a);break}
+  });
+  return out;
+}
+const rxLine=()=>`<div class="rxl"><input name="drug" list="drugs" placeholder="Medicine" aria-label="Medicine" required><input name="dose" placeholder="Dose, e.g. 500mg" aria-label="Dose"><select name="freq" aria-label="How often">${FREQS.map(f=>`<option>${f}</option>`).join('')}</select><input name="days" type="number" min="1" placeholder="Days" aria-label="Days"><button type="button" class="btn sm bad" data-act="rmRx" aria-label="Remove medicine">×</button></div>`;
+function newRx(pid){
+  if(!canRx()){toast('Only doctors can prescribe.','bad');return}
+  const p0=pat(pid);
+  openModal('New prescription',`${sel('Patient','patientId',[['','— Choose patient —'],...patOpts()],pid||'','required')}
+  <div id="alg" class="note" style="margin:0" ${p0&&p0.allergies?'':'hidden'}>Allergies: <b>${esc(p0?p0.allergies:'')}</b></div>
+  <datalist id="drugs">${db.medicines.map(m=>`<option value="${esc(m.name)}">`).join('')}</datalist>
+  <div class="lines" id="rxlines">${rxLine()}</div><button type="button" class="btn sm" data-act="addRx" style="align-self:flex-start">+ Add medicine</button>
+  ${area('Instructions for the patient','notes','',2)}
+  <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" name="override" style="width:auto"> I have checked any allergy warning and it is safe to prescribe</label>`,
+  {wide:true,submit:'Save and print',onSubmit:fd=>{
+    const p=pat(fd.get('patientId'));if(!p){toast('Choose the patient.','bad');return false}
+    const dr=fd.getAll('drug'),ds=fd.getAll('dose'),fr=fd.getAll('freq'),dy=fd.getAll('days');
+    const items=dr.map((d,i)=>({drug:d.trim(),dose:(ds[i]||'').trim(),freq:fr[i],days:+dy[i]||0})).filter(x=>x.drug);
+    if(!items.length){toast('Add at least one medicine.','bad');return false}
+    const bad=[];items.forEach(it=>allergyConflicts(p,it.drug).forEach(a=>bad.push(it.drug+' (allergy: '+a+')')));
+    if(bad.length&&!fd.has('override')){toast('Allergy warning: '+bad.join(', ')+'. Tick the box to confirm if you still want to prescribe it.','bad');return false}
+    const rx={id:uid('RX'),patientId:p.id,date:today(),doctor:me.name,items:items,notes:fd.get('notes'),allergyOverride:bad.length>0};
+    db.rx.push(rx);save();toast('Prescription saved.');render();setTimeout(()=>printHTML(rxHTML(rx)),0);
+  }});
+}
+function rxHTML(rx){
+  const p=pat(rx.patientId);
+  return letterhead()+'<h2 style="margin:0 0 6px">Prescription</h2><p>Date: '+fdate(rx.date)+'</p>'+ptLine(p)+'<p><b>Allergies:</b> '+(p.allergies?esc(p.allergies):'none recorded')+'</p>'
+   +'<table style="width:100%;border-collapse:collapse"><thead><tr><th align="left">#</th><th align="left">Medicine</th><th align="left">Dose</th><th align="left">How often</th><th align="left">Days</th></tr></thead><tbody>'
+   +rx.items.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(x.drug)+'</td><td>'+esc(x.dose)+'</td><td>'+esc(x.freq)+'</td><td>'+(x.days||'')+'</td></tr>').join('')+'</tbody></table>'
+   +(rx.notes?'<p><b>Instructions:</b> '+esc(rx.notes)+'</p>':'')+sigLine(rx.doctor);
+}
+
+/* ---- letters ---- */
+function docModal(type,pid){
+  const sick=type==='sick';
+  openModal(sick?'Sick note':'Referral letter',`${sel('Patient','patientId',[['','— Choose patient —'],...patOpts()],pid||'','required')}
+  ${sick?`<div class="grid2">${fld('Rest from','from',today(),'date','required')}${fld('Number of days','days','2','number','min="1" required')}</div>${fld('Diagnosis to show (leave blank to keep it confidential)','diagnosis')}${area('Remarks','notes','',2)}`
+  :`${fld('Refer to (hospital or specialist)','to','','text','required')}${sel('Urgency','urgency',['Routine','Urgent','Emergency'])}${fld('Reason for referral','reason','','text','required')}${area('Clinical summary and treatment so far','summary','',4)}`}`,
+  {wide:true,submit:'Save and print',onSubmit:fd=>{
+    const o=Object.fromEntries(fd);if(!o.patientId){toast('Choose the patient.','bad');return false}
+    const d={id:uid('DC'),type:type,patientId:o.patientId,date:today(),by:me.name};delete o.patientId;d.f=o;
+    db.docs.push(d);save();toast('Saved.');render();setTimeout(()=>printHTML(docHTML(d)),0);
+  }});
+}
+function docHTML(d){
+  const p=pat(d.patientId),f=d.f;
+  if(d.type==='sick'){
+    const to=new Date(f.from+'T00:00');to.setDate(to.getDate()+(+f.days||1)-1);
+    return letterhead()+'<h2>Sick note</h2><p>Date: '+fdate(d.date)+'</p><p>This is to certify that <b>'+esc(p.name)+'</b> ('+esc(p.id)+') was seen at '+esc(db.settings.clinic)+' and is advised to rest for <b>'+(+f.days||1)+' day(s)</b>, from '+fdate(f.from)+' to '+fdate(iso(to))+'.</p>'+(f.diagnosis?'<p>Diagnosis: '+esc(f.diagnosis)+'</p>':'')+(f.notes?'<p>'+esc(f.notes)+'</p>':'')+sigLine(d.by);
+  }
+  return letterhead()+'<h2>Referral letter</h2><p>Date: '+fdate(d.date)+'</p><p>To: <b>'+esc(f.to)+'</b> · Urgency: <b>'+esc(f.urgency)+'</b></p>'+ptLine(p)+(p.allergies?'<p><b>Allergies:</b> '+esc(p.allergies)+'</p>':'')+'<p><b>Reason for referral:</b> '+esc(f.reason)+'</p>'+(f.summary?'<p><b>Clinical summary and treatment so far:</b><br>'+esc(f.summary).replace(/\n/g,'<br>')+'</p>':'')+'<p>Thank you for seeing this patient.</p>'+sigLine(d.by);
+}
+
+/* ---- laboratory ---- */
+const LABCAT=[
+ {n:'Malaria RDT',t:'q',price:10000},{n:'Malaria blood smear',t:'q',price:10000},
+ {n:'Haemoglobin',t:'n',unit:'g/dL',lo:12,hi:16,loM:13,hiM:17,price:8000},
+ {n:'White blood cell count',t:'n',unit:'×10⁹/L',lo:4,hi:11,price:10000},
+ {n:'Platelet count',t:'n',unit:'×10⁹/L',lo:150,hi:400,price:10000},
+ {n:'Random blood sugar',t:'n',unit:'mmol/L',lo:3.9,hi:7.8,price:5000},
+ {n:'Fasting blood sugar',t:'n',unit:'mmol/L',lo:3.9,hi:5.6,price:5000},
+ {n:'Creatinine',t:'n',unit:'µmol/L',lo:50,hi:110,price:15000},
+ {n:'HIV rapid test',t:'q',price:5000},{n:'Hepatitis B surface antigen',t:'q',price:15000},
+ {n:'Pregnancy test (urine)',t:'q',price:5000},{n:'Typhoid test',t:'q',price:10000},
+ {n:'Urinalysis',t:'t',price:8000},{n:'Stool microscopy',t:'t',price:8000},{n:'Blood group',t:'t',price:5000}];
+function labRange(c,p){const m=p&&p.sex==='M';return{lo:m&&c.loM!==undefined?c.loM:c.lo,hi:m&&c.hiM!==undefined?c.hiM:c.hi}}
+function refText(c,p){if(c.t==='q')return 'Negative';if(c.t==='n'){const r=labRange(c,p);return r.lo+'–'+r.hi+' '+c.unit}return ''}
+function labFlag(t,p){
+  const c=LABCAT.find(x=>x.n===t.name);if(!c||t.result===''||t.result==null)return '';
+  if(c.t==='q')return /pos|reactive|detected/i.test(t.result)?'Positive':'';
+  if(c.t==='n'){const v=parseFloat(t.result);if(isNaN(v))return '';const r=labRange(c,p);return v<r.lo?'Low':v>r.hi?'High':''}
+  return '';
+}
+const labTests=l=>l.tests.map(t=>esc(t.name)+(t.result!==''?': <b>'+esc(t.result)+'</b>'+(t.flag?' '+pill(t.flag,t.flag==='Low'||t.flag==='High'?'warn':'bad'):''):'')).join('<br>');
+V.lab=()=>{
+  const f=S.lfilter||'pending';
+  let list=db.labs.slice().sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id));
+  if(f==='pending')list=list.filter(l=>l.status==='Ordered');else if(f==='done')list=list.filter(l=>l.status==='Resulted');
+  const tabs=[['pending','Awaiting results'],['done','Resulted'],['all','All']];
+  return `<div class="note">Reference ranges are general adult values. Follow your own laboratory's ranges when they differ.</div>
+  <div class="bar"><div class="tabs" style="margin:0;border:0" role="tablist">${tabs.map(x=>`<button role="tab" aria-selected="${f===x[0]}" data-act="lfilter" data-f="${x[0]}">${x[1]}</button>`).join('')}</div><span class="grow"></span><button class="btn pri" data-act="orderLab">Order tests</button></div>
+  <div class="card" style="padding:6px">${list.length?`<div class="tw"><table><thead><tr><th>Date</th><th>Patient</th><th>Tests and results</th><th>Status</th><th></th></tr></thead><tbody>${list.map(l=>`<tr><td class="nowrap">${fdate(l.date)}${l.urgency==='Urgent'?'<div>'+pill('Urgent','bad')+'</div>':''}</td><td><a href="#patient/${l.patientId}" data-act="openPatient" data-id="${l.patientId}">${esc(pname(l.patientId))}</a>${l.note?`<div class="muted sm">${esc(l.note)}</div>`:''}</td><td style="min-width:200px">${labTests(l)}</td><td>${pill(l.status==='Resulted'?'Resulted':'Awaiting',l.status==='Resulted'?'ok':'warn')}</td><td class="right nowrap">${hb(l.status==='Resulted'?'Edit':'Enter results','labEnter',l.id,l.status==='Resulted'?'':'pri')} ${l.status==='Resulted'?hb('Print','labPrint',l.id):''}</td></tr>`).join('')}</tbody></table></div>`:empty('No lab orders here.')}</div>`;
+};
+function orderLab(pid){
+  openModal('Order lab tests',`${sel('Patient','patientId',[['','— Choose patient —'],...patOpts()],pid||'','required')}
+  <div class="tests">${LABCAT.map(c=>`<label class="chk"><input type="checkbox" name="test" value="${esc(c.n)}" style="width:auto"><span>${esc(c.n)}</span><span class="muted sm">${money(c.price)}</span></label>`).join('')}</div>
+  ${fld('Other test (optional)','other')}
+  <div class="grid2">${sel('Urgency','urgency',['Routine','Urgent'])}${fld('Clinical note','note')}</div>
+  <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" name="bill" checked style="width:auto"> Add test charges to the patient's invoice</label>`,
+  {wide:true,submit:'Order tests',onSubmit:fd=>{
+    const pid2=fd.get('patientId');if(!pid2){toast('Choose the patient.','bad');return false}
+    const names=fd.getAll('test'),other=(fd.get('other')||'').trim();
+    if(!names.length&&!other){toast('Choose at least one test.','bad');return false}
+    const tests=names.map(n=>({name:n,result:'',flag:''}));if(other)tests.push({name:other,result:'',flag:''});
+    const l={id:uid('LB'),patientId:pid2,date:today(),by:me.name,urgency:fd.get('urgency'),note:fd.get('note'),status:'Ordered',tests:tests};
+    db.labs.push(l);
+    if(fd.has('bill')){const items=names.map(n=>{const c=LABCAT.find(x=>x.n===n);return{desc:n,qty:1,price:c?c.price:0}}).filter(x=>x.price>0);if(items.length)addToInvoice(pid2,items)}
+    save();toast('Tests ordered.');render();
+  }});
+}
+function enterResults(id){
+  const l=db.labs.find(x=>x.id===id),p=pat(l.patientId);
+  openModal('Lab results',`<p class="muted" style="margin:0">${esc(p.name)} · ordered ${fdate(l.date)}${l.note?' · '+esc(l.note):''}</p>`
+   +l.tests.map((t,i)=>{const c=LABCAT.find(x=>x.n===t.name)||{t:'t'};
+     return c.t==='q'?sel(t.name,'r'+i,['','Negative','Positive'],t.result):c.t==='n'?fld(t.name+' ('+c.unit+', normal '+refText(c,p)+')','r'+i,t.result,'number','step="any"'):fld(t.name,'r'+i,t.result)}).join('')
+   +area('Comment','comment',l.comment||'',2),
+  {wide:true,submit:'Save results',onSubmit:fd=>{
+    l.tests.forEach((t,i)=>{t.result=String(fd.get('r'+i)||'').trim();t.flag=labFlag(t,p)});
+    l.comment=fd.get('comment');const all=l.tests.every(t=>t.result!=='');
+    l.status=all?'Resulted':'Ordered';l.resultedBy=me.name;l.resultedAt=new Date().toISOString();
+    save();toast(all?'Results saved.':'Partial results saved.');render();
+  }});
+}
+function labHTML(l){
+  const p=pat(l.patientId);
+  return letterhead()+'<h2 style="margin:0 0 6px">Laboratory report</h2><p>Ordered: '+fdate(l.date)+(l.resultedAt?' · Reported: '+fdt(l.resultedAt):'')+'</p>'+ptLine(p)
+   +'<table style="width:100%;border-collapse:collapse"><thead><tr><th align="left">Test</th><th align="left">Result</th><th align="left">Normal range</th><th align="left">Flag</th></tr></thead><tbody>'
+   +l.tests.map(t=>{const c=LABCAT.find(x=>x.n===t.name)||{t:'t'};return '<tr><td>'+esc(t.name)+'</td><td><b>'+esc(t.result||'pending')+'</b></td><td>'+esc(refText(c,p))+'</td><td>'+esc(t.flag||'')+'</td></tr>'}).join('')+'</tbody></table>'
+   +(l.comment?'<p><b>Comment:</b> '+esc(l.comment)+'</p>':'')+'<p style="font-size:12px">Reported by '+esc(l.resultedBy||'')+'. Results must be interpreted by a clinician.</p>';
+}
+const labRow=()=>{const n=db.labs.filter(l=>l.status==='Ordered').length;return `<div class="row"><div><b>${n} lab order${n===1?'':'s'} awaiting results</b></div><button class="btn sm" data-act="nav" data-v="lab">Laboratory</button></div>`};
+
+/* ---- patient record cards ---- */
+function patientClinicalCards(p){
+  const by=(a)=>a.filter(x=>x.patientId===p.id).sort((x,y)=>(y.date+y.id).localeCompare(x.date+x.id));
+  const rx=by(db.rx),lb=by(db.labs),dc=by(db.docs);
+  const DOCN={sick:'Sick note',ref:'Referral letter'};
+  return `<section class="card"><header><h2>Prescriptions</h2>${canRx()?hb('Prescribe','newRx',p.id,'sm pri'):''}</header>
+   ${rx.length?`<div class="list">${rx.slice(0,5).map(x=>`<div class="row"><div><b>${fdate(x.date)}</b><div class="muted sm">${x.items.map(i=>esc(i.drug+(i.dose?' '+i.dose:''))).join(', ')}</div></div>${hb('Print','rxPrint',x.id)}</div>`).join('')}</div>`:empty('No prescriptions yet.')}</section>
+  <section class="card"><header><h2>Laboratory</h2>${hb('Order tests','orderLab',p.id,'sm pri')}</header>
+   ${lb.length?`<div class="list">${lb.slice(0,5).map(l=>`<div class="row" style="align-items:flex-start"><div><b>${fdate(l.date)}</b> ${pill(l.status==='Resulted'?'Resulted':'Awaiting',l.status==='Resulted'?'ok':'warn')}<div class="sm" style="margin-top:4px">${labTests(l)}</div></div><div class="nowrap">${hb(l.status==='Resulted'?'Print':'Enter results',l.status==='Resulted'?'labPrint':'labEnter',l.id)}</div></div>`).join('')}</div>`:empty('No lab tests yet.')}</section>
+  <section class="card"><header><h2>Letters</h2><div class="hv-acts">${canRx()?hb('Sick note','docNew',p.id,'sm','data-t="sick"')+hb('Referral','docNew',p.id,'sm','data-t="ref"'):''}</div></header>
+   ${dc.length?`<div class="list">${dc.slice(0,5).map(x=>`<div class="row"><div><b>${DOCN[x.type]||x.type}</b><div class="muted sm">${fdate(x.date)} · ${esc(x.by)}</div></div>${hb('Print','docPrint',x.id)}</div>`).join('')}</div>`:empty('No letters yet.')}</section>`;
+}
+
+/* ---- review recall ---- */
+function recallList(){
+  const t=today(),days=+db.settings.recallDays||90,out=[];
+  const sched=new Set(db.appointments.filter(a=>a.status==='Scheduled'&&a.date>=t).map(a=>a.patientId));
+  db.patients.forEach(p=>{
+    if(!(p.chronic||'').trim()||sched.has(p.id))return;
+    const dates=[...db.visits.filter(v=>v.patientId===p.id).map(v=>v.date),...db.homeVisits.filter(h=>h.patientId===p.id&&h.status==='Completed').map(h=>h.date)].sort();
+    const last=dates.pop(),since=last?dayDiff(last,t):9999;
+    if(since>=days)out.push({p:p,last:last,since:since});
+  });
+  return out.sort((a,b)=>b.since-a.since);
+}
+function recallView(){
+  const list=recallList(),days=+db.settings.recallDays||90;
+  const tabs=[['upcoming','Upcoming'],['today','Today'],['past','Past'],['all','All'],['recall','Due for review']];
+  return `<div class="bar"><div class="tabs" style="margin:0;border:0" role="tablist">${tabs.map(x=>`<button role="tab" aria-selected="${x[0]==='recall'}" data-act="afilter" data-f="${x[0]}">${x[1]}</button>`).join('')}</div></div>
+  <p class="muted" style="margin:0 0 12px">Patients with a long-term condition, not seen for ${days} days, with no appointment booked.</p>
+  <div class="card" style="padding:6px">${list.length?`<div class="tw"><table><thead><tr><th>Patient</th><th>Condition</th><th>Last seen</th><th></th></tr></thead><tbody>${list.map(r=>`<tr><td><a href="#patient/${r.p.id}" data-act="openPatient" data-id="${r.p.id}">${esc(r.p.name)}</a><div class="muted sm">${esc(r.p.phone||'')}</div></td><td>${esc(r.p.chronic)}</td><td class="nowrap">${r.last?fdate(r.last)+'<div class="muted sm">'+r.since+' days ago</div>':'<span class="muted">No visit on record</span>'}</td><td class="right nowrap">${hb('Message','recallMsg',r.p.id,'pri')} ${hb('Book','recallBook',r.p.id)}</td></tr>`).join('')}</tbody></table></div>`:empty('Nobody is overdue for review.')}</div>`;
+}
+
+/* ---- receipts ---- */
+function receiptNo(i,k){return i.id+'-R'+(k+1)}
+function paidUpTo(i,k){return sum(i.payments.slice(0,k+1).map(x=>x.amount))}
+function receiptHTML(i,k){
+  const p=pat(i.patientId),x=i.payments[k];
+  return letterhead()+'<h2 style="margin:0 0 6px">Payment receipt</h2><p>Receipt no: <b>'+receiptNo(i,k)+'</b><br>Date: '+fdate(x.date)+'</p>'+ptLine(p)
+   +'<table style="width:100%;border-collapse:collapse"><tbody><tr><td>Amount received</td><td align="right"><b>'+money(x.amount)+'</b></td></tr><tr><td>Method</td><td align="right">'+esc(x.method)+(x.ref?' · '+esc(x.ref):'')+'</td></tr><tr><td>Invoice '+esc(i.id)+' total</td><td align="right">'+money(invTotal(i))+'</td></tr><tr><td>Balance after this payment</td><td align="right">'+money(invTotal(i)-paidUpTo(i,k))+'</td></tr></tbody></table><p>Thank you.</p>';
+}
+function receiptText(i,k){
+  const p=pat(i.patientId),x=i.payments[k];
+  return 'Receipt '+receiptNo(i,k)+' from '+db.settings.clinic+': we received '+money(x.amount)+' from '+p.name+' on '+fdate(x.date)+' by '+x.method+(x.ref?' (ref '+x.ref+')':'')+'. Invoice total '+money(invTotal(i))+', balance '+money(invTotal(i)-paidUpTo(i,k))+'. Thank you.';
+}
+
+function sampleClinical(){
+  if(!(db.patients[0]&&db.patients[0].id==='P101'&&db.patients.length>=8))return{rx:[],labs:[]};
+  const P=i=>db.patients[i],mk=(pi,tests,extra)=>{const l=Object.assign({id:uid('LB'),patientId:P(pi).id,date:today(),by:'Dr. Amina Nsubuga',urgency:'Routine',note:'',status:'Ordered',tests:tests.map(n=>({name:n[0],result:n[1]||'',flag:''}))},extra||{});l.tests.forEach(t=>t.flag=labFlag(t,P(pi)));return l};
+  return{
+   rx:[{id:uid('RX'),patientId:P(1).id,date:plus(-6),doctor:'Dr. Amina Nsubuga',items:[{drug:'Amlodipine 5mg',dose:'5mg',freq:'Once daily',days:30}],notes:'Take in the morning. Return for a blood pressure check in 4 weeks.',allergyOverride:false}],
+   labs:[mk(0,[['Random blood sugar'],['Haemoglobin']],{note:'Diabetes review'}),
+         mk(6,[['Fasting blood sugar','8.2'],['Haemoglobin','11.4']],{date:plus(-2),status:'Resulted',resultedBy:'Nurse Janet Auma',resultedAt:new Date(Date.now()-17e7).toISOString(),comment:'Sugar above target. Review medication.'})]
+  };
+}
+
+
+function labContext(p){
+  if(!p||!db.labs)return '';
+  const r=db.labs.filter(l=>l.patientId===p.id&&l.status==='Resulted').sort((a,b)=>b.date<a.date?-1:1).slice(0,3);
+  return r.length?'\nRecent lab results:\n'+r.map(l=>'- '+l.date+': '+l.tests.map(t=>t.name+' '+t.result+(t.flag?' ('+t.flag+')':'')).join('; ')).join('\n'):''
+}
 /* ---- users ---- */
 V.users=()=>`<div class="bar"><span class="grow"></span><button class="btn pri" data-act="newUser">Add staff account</button></div><div class="card" style="padding:6px"><div class="tw"><table><thead><tr><th>Name</th><th>Username</th><th>Role</th><th></th></tr></thead><tbody>${db.users.map(u=>`<tr><td><b>${esc(u.name)}</b>${u.id===me.id?' <span class="muted sm">(you)</span>':''}</td><td class="mono">${esc(u.username)}</td><td>${pill(ROLE[u.role])}</td><td class="right nowrap"><button class="btn sm" data-act="resetPw" data-id="${u.id}">Reset password</button> ${u.id!==me.id?`<button class="btn sm bad" data-act="delUser" data-id="${u.id}">Remove</button>`:''}</td></tr>`).join('')}</tbody></table></div></div>
 <p class="muted sm" style="margin-top:12px">Demo build: accounts are stored in this browser. A production deployment needs a server-side login.</p>`;
 
 /* ---- settings ---- */
+function cloudCard(){
+  const on=cloudOn();
+  return `<section class="card"><header><h2>Online database</h2><span class="pill ${on?'ok':'gray'}">${on?'Connected':'Not connected'}</span></header>
+  <p class="muted" style="margin:0">${on?'Every phone connected to the same project sees the same records. Changes upload within seconds and other phones pick them up about every 20 seconds.':'Keep all records online so the whole team sees the same patients, and nothing is lost if a phone is lost.'}</p>
+  <div class="bar" style="margin:0"><button class="btn pri" data-act="cloudSetup">${on?'Manage':'Connect'}</button></div></section>`;
+}
 V.settings=()=>{
   const s=db.settings,models=S.ai.models;
   return `<div class="cols"><section class="card"><header><h2>Ollama (local AI)</h2><span class="pill ${S.ai.ok?'ok':'warn'}">${S.ai.ok?'Connected':'Not reachable'}</span></header>
@@ -1007,13 +1535,13 @@ V.settings=()=>{
   <h4>Contact channels</h4>
   <div class="grid2">${fld('Clinic WhatsApp number','clinicWhatsApp',s.clinicWhatsApp||'','tel','placeholder="0772 000 000"')}${fld('Clinic phone (calls)','clinicPhone',s.clinicPhone||'','tel','placeholder="0414 000 000"')}</div>
   <div class="grid2">${fld('Clinic email','clinicEmail',s.clinicEmail||'','email')}${fld('Country code','countryCode',s.countryCode||'256','text','inputmode="numeric"')}</div>
-  ${fld('Home visit call-out fee','homeFee',s.homeFee||0,'number','min="0"')}
+  ${fld('Home visit call-out fee','homeFee',s.homeFee||0,'number','min="0"')}${fld('Review reminder after (days)','recallDays',s.recallDays||90,'number','min="7" max="365"')}
   <div class="bar" style="margin:0"><button class="btn pri">Save and test connection</button></div></form>
   <h4>Setup</h4><ol class="muted" style="padding-left:18px;margin:0"><li>Install Ollama and run <span class="mono">ollama pull ${esc(s.model)}</span></li><li>Start the server with <span class="mono">OLLAMA_ORIGINS="*" ollama serve</span> so this page may call it</li><li>Everything stays on this computer.</li></ol></section>
   <section class="card"><header><h2>Data</h2></header><p class="muted">Records live in this browser's storage. Export a backup regularly.</p>
   <div class="bar"><button class="btn" data-act="backup">Download backup</button><label class="btn" style="cursor:pointer">Restore backup<input type="file" id="restore" accept="application/json" hidden></label></div>
   <h4>Sample data</h4><p class="muted">The system opens with fictional sample patients. Reset replaces everything with fresh samples; clear removes all records but keeps staff accounts.</p>
-  <div class="bar"><button class="btn bad" data-act="resetData">Reset to sample data</button><button class="btn bad" data-act="clearData">Clear all records</button></div></section>${bookingCard()}</div>`;
+  <div class="bar"><button class="btn bad" data-act="resetData">Reset to sample data</button><button class="btn bad" data-act="clearData">Clear all records</button></div></section>${cloudCard()}${bookingCard()}</div>`;
 };
 
 /* ============ render & events ============ */
@@ -1037,7 +1565,10 @@ const actions={
   addLine:()=>$('#lines').insertAdjacentHTML('beforeend',lineRow()),rmLine:(d,t)=>{if($$('.line').length>1)t.closest('.line').remove()},
   pay:d=>{const i=db.invoices.find(x=>x.id===d.id),a=+$('#mform [name=amount]').value;
     if(!(a>0)||a>invBal(i)){toast('Enter an amount up to the balance.','bad');return}
-    i.payments.push({date:today(),amount:a,method:$('#mform [name=method]').value});save();toast('Payment recorded.');render();viewInvoice(i.id)},
+    const m=$('#mform [name=method]').value,ref=($('#mform [name=ref]').value||'').trim();
+    if(REFMETHODS.includes(m)&&!ref){toast('Enter the transaction reference for '+m+'.','bad');return}
+    if(ref&&db.invoices.some(v=>v.payments.some(x=>x.ref&&x.ref.toLowerCase()===ref.toLowerCase()))){toast('That reference was already used on another payment.','bad');return}
+    i.payments.push({date:today(),amount:a,method:m,ref:ref});save();toast('Payment recorded.');render();viewInvoice(i.id)},
   printInvoice:d=>printHTML(invoiceHTML(db.invoices.find(x=>x.id===d.id))),
   exportBilling:()=>{const rows=[['Invoice','Date','Patient','Total','Paid','Balance','Status'],...db.invoices.map(i=>[i.id,i.date,pname(i.patientId),invTotal(i),invPaid(i),invBal(i),invStatus(i)])];download('billing.csv',csv(rows),'text/csv')},
   printBilling:()=>printHTML('<h1>'+esc(db.settings.clinic)+' – billing report</h1>'+$('#view').innerHTML),
@@ -1084,13 +1615,14 @@ const actions={
   resetPw:d=>openModal('Reset password',fld('New password','pw','','text','required minlength="6"'),{submit:'Reset',onSubmit:async fd=>{db.users.find(u=>u.id===d.id).hash=await sha(fd.get('pw'));save();toast('Password reset.')}}),
   delUser:d=>openModal('Remove account','<p>This staff member will no longer be able to sign in.</p>',{submit:'Remove',onSubmit:()=>{db.users=db.users.filter(u=>u.id!==d.id);save();toast('Account removed.');render()}}),
   backup:()=>download('caredesk-backup-'+today()+'.json',JSON.stringify(db),'application/json'),
-  resetData:()=>openModal('Reset to sample data','<p>All current records and accounts will be replaced with the demo data and demo logins.</p>',{submit:'Reset everything',onSubmit:async()=>{const s=db.settings;db=seed();db.settings=s;db.users=await demoUsers();save();me=null;sessionStorage.removeItem(SS);showLogin()}}),
-  clearData:()=>openModal('Clear all records','<p>Patients, visits, appointments, medicines and invoices will be permanently deleted. Staff accounts stay.</p>',{submit:'Delete records',onSubmit:()=>{Object.assign(db,{patients:[],visits:[],appointments:[],medicines:[],invoices:[],visitors:[],blocked:[]});save();toast('Records cleared.');render()}}),
+  resetData:()=>openModal('Reset to sample data',cloudWarn()+'<p>All current records and accounts will be replaced with the demo data and demo logins.</p>',{submit:'Reset everything',onSubmit:async()=>{const s=db.settings;db=seed();db.settings=s;db.users=await demoUsers();save();me=null;sessionStorage.removeItem(SS);showLogin()}}),
+  clearData:()=>openModal('Clear all records',cloudWarn()+'<p>Patients, visits, appointments, medicines and invoices will be permanently deleted. Staff accounts stay.</p>',{submit:'Delete records',onSubmit:()=>{Object.assign(db,{patients:[],visits:[],appointments:[],medicines:[],invoices:[],visitors:[],blocked:[],rx:[],labs:[],docs:[],requests:[],homeVisits:[]});save();toast('Records cleared.');render()}}),
 };
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const f=actions[t.dataset.act];if(f)f(t.dataset,t,e)});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('tr.click'))e.target.click()});
 document.addEventListener('input',e=>{const f=e.target.dataset?.filter;if(f){S.q=e.target.value;filters[f]()}});
 document.addEventListener('change',e=>{
+  if(e.target.name==='patientId'&&e.target.form&&e.target.form.querySelector('#alg')){const p=pat(e.target.value),a=e.target.form.querySelector('#alg');a.hidden=!(p&&p.allergies);a.innerHTML='Allergies: <b>'+esc(p?p.allergies:'')+'</b>'}
   if(e.target.name==='patientId'&&e.target.form&&e.target.form.elements.landmark){const p=pat(e.target.value),f=e.target.form.elements;if(p){if(!f.phone.value)f.phone.value=p.phone||'';if(!f.address.value)f.address.value=p.address||''}}
   const c=e.target.dataset?.change;
   if(c==='bfilter'){S.bfilter=e.target.value;render()}
@@ -1144,6 +1676,35 @@ Object.assign(actions,{
   waRem:d=>{const el=$('#'+d.id);const u=waUrl(d.phone,el&&el.value);if(!u){toast('This phone number cannot be used for WhatsApp.','bad');return}openExternal(u)},
   copyLink:()=>{const v=$('#bkLink').value;navigator.clipboard?navigator.clipboard.writeText(v).then(()=>toast('Link copied.'),()=>toast('Copy failed. Select the link and copy it.','bad')):toast('Select the link and copy it.','bad')},
   shareLink:()=>openExternal('https://wa.me/?text='+encodeURIComponent('Book an appointment or a home visit with '+db.settings.clinic+': '+bookingLink())),
+  pfilter:d=>{S.pfilter=d.f;render()},
+  sendHome:d=>{const p=pat(d.id);openModal('Mark as sent home',`<p style="margin:0"><b>${esc(p.name)}</b> has healed and is going home. Any ward admission will be closed as discharged today. You can re-open the file later if the patient returns.</p>`,{submit:'Sent home',onSubmit:()=>{p.sentHome=today();db.visits.filter(v=>v.patientId===p.id&&v.admitted&&!v.discharge).forEach(v=>v.discharge=today());save();toast(p.name+' marked as sent home.');render()}})},
+  undoHome:d=>{const p=pat(d.id);delete p.sentHome;save();toast('File re-opened.');render()},
+  delPatient:d=>askDeletePatients([d.id],'Delete patient record'),
+  delHome:()=>askDeletePatients(db.patients.filter(p=>p.sentHome).map(p=>p.id),'Delete all sent-home patients'),
+  delMed:d=>{if(me.role!=='admin')return;const m=db.medicines.find(x=>x.id===d.id);openModal('Delete medicine',`<p style="margin:0">Remove <b>${esc(m.name)}</b> (${m.stock} ${esc(m.unit)} in stock) from the inventory? Past invoices keep their lines.</p><label class="chk red"><input type="checkbox" name="sure" required style="width:auto"><span>I understand this cannot be undone</span></label>`,{submit:'Delete medicine',onSubmit:()=>{db.medicines=db.medicines.filter(x=>x.id!==d.id);save();toast(m.name+' deleted.');render()}})},
+  delVisitor:d=>{if(!canBlock())return;const v=db.visitors.find(x=>x.id===d.id);if(!v||!v.timeOut){toast('Check the visitor out first.','bad');return}openModal('Delete visitor record',`<p style="margin:0">Delete the record for <b>${esc(v.name)}</b>?</p>`,{submit:'Delete',onSubmit:()=>{db.visitors=db.visitors.filter(x=>x.id!==d.id);save();toast('Record deleted.');render()}})},
+  clearVisitors:()=>askDeleteVisitors(),
+  cloudSetup:()=>{if(cloudOn()&&!(me&&me.role==='admin')){toast(cloudState==='ok'?'Online database: synced.':cloudErr||'Online database: waiting to sync.',cloudState==='ok'?'':'bad');return}cloudSetup()},
+  cloudChip:()=>{if(me&&me.role==='admin')cloudSetup();else toast(cloudState==='ok'?'Online database: synced.':cloudErr||'Online database: waiting to sync.',cloudState==='ok'?'':'bad')},
+  syncNow:()=>{toast('Syncing…');syncNow()},
+  cloudOff:()=>{if(!(me&&me.role==='admin'))return;setTimeout(()=>openModal('Disconnect this phone','<p style="margin:0">This phone keeps its current records but stops syncing. Other phones are not affected. You can connect again later.</p>',{submit:'Disconnect',onSubmit:()=>{CS=null;try{localStorage.removeItem(SYNC_LS)}catch(e){}updChip();toast('Disconnected.');render()}}),0)},
+  printChart:d=>{const c=chartDefs().find(x=>x.k===d.k);if(c)printHTML(chartPrintHTML([c]))},
+  printCharts:()=>printHTML(chartPrintHTML(chartDefs())),
+  newRx:d=>newRx(d.id),
+  addRx:(d,el)=>{el.closest('form').querySelector('#rxlines').insertAdjacentHTML('beforeend',rxLine())},
+  rmRx:(d,el)=>{const b=el.closest('#rxlines');if(b&&b.children.length>1)el.closest('.rxl').remove()},
+  rxPrint:d=>printHTML(rxHTML(db.rx.find(x=>x.id===d.id))),
+  docNew:d=>docModal(d.t,d.id),
+  docPrint:d=>printHTML(docHTML(db.docs.find(x=>x.id===d.id))),
+  orderLab:d=>orderLab(d.id),
+  lfilter:d=>{S.lfilter=d.f;render()},
+  labEnter:d=>enterResults(d.id),
+  labPrint:d=>printHTML(labHTML(db.labs.find(x=>x.id===d.id))),
+  rcPrint:d=>printHTML(receiptHTML(db.invoices.find(x=>x.id===d.id),+d.i)),
+  rcMsg:d=>{const i=db.invoices.find(x=>x.id===d.id),p=pat(i.patientId);messageModal('Send receipt',{name:p.name,phone:p.phone,email:p.email,text:receiptText(i,+d.i),subject:'Receipt from '+db.settings.clinic})},
+  recallMsg:d=>{const p=pat(d.id),r=recallList().find(x=>x.p.id===d.id),mo=r&&r.since<9999?Math.max(1,Math.round(r.since/30)):null;
+    messageModal('Review reminder',{name:p.name,phone:p.phone,email:p.email,text:'Hello '+p.name.split(' ')[0]+', this is '+db.settings.clinic+'. '+(mo?'It has been about '+mo+' month'+(mo>1?'s':'')+' since your last visit. ':'')+'It is time for your review ('+p.chronic+'). Please reply with a day that suits you, or call '+(db.settings.clinicPhone||'us')+'. Thank you.',subject:'Time for your review - '+db.settings.clinic})},
+  recallBook:d=>newAppt(d.id),
   regVisitor:()=>regVisitor(),
   visitorOut:d=>{const v=db.visitors.find(x=>x.id===d.id);v.timeOut=new Date().toISOString();save();toast(`${v.name} checked out. Collect badge ${v.badge}.`);render()},
   visitorBadge:d=>printHTML(badgeHTML(db.visitors.find(x=>x.id===d.id))),
@@ -1161,13 +1722,13 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 /* ============ boot ============ */
-function showLogin(){$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
+function showLogin(){$('#cloudLink').textContent=cloudOn()?'Online database connected ✓':'Connect this phone to the online database';$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
 function enter(){
   $('#login').hidden=true;$('#app').hidden=false;
   $('#meName').textContent=me.name;$('#meRole').textContent=ROLE[me.role];buildNav();
   const [v,id]=location.hash.slice(1).split('/');
   if(v&&(PERM[v]&&can(v)||v==='patient'&&can('patients')))go(v,id);else go(can('dashboard')?'dashboard':'visitors');
-  $('#aiChip').hidden=me.role==='gatekeeper';
+  $('#aiChip').hidden=me.role==='gatekeeper';updChip();syncNow();
   if(me.role!=='gatekeeper')checkAI();
 }
 $('#loginForm').addEventListener('submit',async e=>{
@@ -1177,6 +1738,7 @@ $('#loginForm').addEventListener('submit',async e=>{
 });
 (async()=>{
   await loadDb();
+  if(cloudOn())syncNow();
   const sid=sessionStorage.getItem(SS);me=db.users.find(u=>u.id===sid)||null;
   if(me)enter();else showLogin();
 })();
