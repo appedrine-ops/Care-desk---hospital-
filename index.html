@@ -65,6 +65,9 @@ button,input,select,textarea{font:inherit;color:inherit}
 .main{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:5}
 .topbar .grow{flex:1;min-width:0}
+.topbar .title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:clamp(18px,5vw,24px)}
+#cloudChip,#aiChip{flex:none;white-space:nowrap;font-size:12px;padding:4px 9px}
+.topbar{gap:8px}
 #menuBtn{display:none}
 main#view{padding:24px;max-width:1280px;width:100%}
 .scrim{display:none}
@@ -79,6 +82,13 @@ main#view{padding:24px;max-width:1280px;width:100%}
 .chk{display:flex;flex-direction:row;gap:8px;align-items:center;font-weight:400;color:var(--ink);font-size:14px;border:1px solid var(--line);border-radius:8px;padding:6px 8px}
 .chk span:last-child{margin-left:auto}
 @media (max-width:820px){.rxl{grid-template-columns:repeat(2,minmax(0,1fr))}.tests{grid-template-columns:minmax(0,1fr)}}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;min-height:86px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.tile .ic{width:26px;height:26px;color:var(--brand)}
+.tile:hover{border-color:var(--brand)}
+.tile .bdg{position:absolute;top:10px;right:10px;background:var(--bad);color:#fff;border-radius:99px;font-style:normal;font-size:12px;padding:1px 7px}
+@media (min-width:560px){.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:980px){.tiles{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .viz{display:flex;flex-direction:column;gap:10px}
 .donutw{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .donutw svg{width:140px;height:140px;flex:none}
@@ -233,7 +243,7 @@ details table td{padding:4px 6px;border:0;font-size:12.5px}
       <button class="btn pri" style="justify-content:center;padding:10px">Sign in</button>
     </form>
     <button type="button" class="btn sm" id="cloudLink" data-act="cloudSetup" style="align-self:center"></button>
-    <details>
+    <details id="demoBox">
       <summary>Demo accounts</summary>
       <table><tbody>
         <tr><td>Admin</td><td class="mono">admin / admin123</td></tr>
@@ -264,7 +274,7 @@ details table td{padding:4px 6px;border:0;font-size:12.5px}
       <button class="btn" id="menuBtn" data-act="openNav" aria-label="Open menu"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <h1 class="title grow" id="pageTitle"></h1>
       <button class="pill gray" id="cloudChip" data-act="cloudChip" hidden></button>
-      <button class="pill gray" id="aiChip" data-act="goSettings" style="border-radius:99px;cursor:pointer" title="Ollama connection"></button>
+      <button class="pill gray" id="aiChip" data-act="goSettings" style="border-radius:99px;cursor:pointer" title="AI connection"></button>
     </header>
     <main id="view"></main>
   </div>
@@ -399,13 +409,36 @@ function updChip(){
   const c=document.getElementById('cloudChip');if(!c)return;
   const on=cloudOn();c.hidden=!(on||(me&&me.role==='admin'));
   const tm=CS&&CS.last?new Date(CS.last).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'';
-  const map={sync:['Syncing…','gray'],ok:['Cloud ✓ '+tm,'ok'],off:['Offline, will sync','warn'],auth:['Cloud: sign in again','bad']};
+  const map={sync:['Syncing…','gray'],ok:['Cloud ✓','ok'],off:['Offline, will sync','warn'],auth:['Cloud: sign in again','bad']};
   const x=on?(map[cloudState]||map.ok):['Cloud off','gray'];
   c.textContent=x[0];c.className='pill '+x[1];c.style.cssText='border-radius:99px;cursor:pointer';
 }
 setInterval(()=>{if(!document.hidden)syncNow()},20000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncNow()});
 window.addEventListener('online',()=>syncNow());
+const appUrl=()=>location.protocol.startsWith('http')?location.href.split('#')[0].split('?')[0].replace(/index\.html$/,''):'';
+function shareApp(){
+  const u=appUrl();
+  openModal('Share the app',u?`<p class="muted" style="margin:0">Send the app to a colleague. They open the link in Chrome, tap the ⋮ menu, then <b>Install app</b>.</p>
+  <div class="mono sm" style="word-break:break-all;padding:8px 10px;border:1px solid var(--line);border-radius:10px">${esc(u)}</div>
+  <div class="bar" style="margin:0"><button type="button" class="btn pri" data-act="shareLink">Share link</button><button type="button" class="btn" data-act="copyLink">Copy link</button></div>
+  <hr style="border:0;border-top:1px solid var(--line);width:100%">
+  <p class="muted sm" style="margin:0"><b>No internet link?</b> Send the app as a file through Xender, Bluetooth or WhatsApp. The receiver opens the file in Chrome. It works without internet, but the link gives the full app experience.</p>
+  <div class="bar" style="margin:0"><button type="button" class="btn" data-act="shareFile">Send app file</button></div>`:'<p style="margin:0">Open the app from its web link (the installed app icon) to share it.</p>',{foot:false});
+}
+async function shareLinkNow(){
+  const u=appUrl(),text=(db.settings.clinic||'CareDesk')+' app. Open this link in Chrome, then tap the menu (three dots) and choose Install app: '+u;
+  if(navigator.share){try{await navigator.share({title:(db.settings.clinic||'CareDesk')+' app',text:text});return}catch(e){if(e&&e.name==='AbortError')return}}
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+async function shareFileNow(){
+  try{
+    const r=await fetch(location.href.split('#')[0].split('?')[0],{cache:'no-store'});if(!r.ok)throw new Error('x');
+    const f=new File([await r.blob()],'CareDesk.html',{type:'text/html'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'CareDesk app'});return}catch(e){if(e&&e.name==='AbortError')return}}
+    download('CareDesk.html',await f.text(),'text/html');toast('Saved to Downloads. Send that file with Xender, Bluetooth or WhatsApp.');
+  }catch(e){toast('Could not prepare the file. Use the link instead.','bad')}
+}
 const cloudWarn=()=>cloudOn()?'<p style="margin:0;color:var(--bad)"><b>The online database is connected.</b> This will also erase the data on every other phone.</p>':'';
 function restoreCS(old){CS=old;try{if(old)saveCS();else localStorage.removeItem(SYNC_LS)}catch(e){}}
 function cloudSetup(){
@@ -436,7 +469,7 @@ function cloudSetup(){
       let has;
       try{has=await sbFetch('/rest/v1/records?select=coll&limit=1')}catch(e){if(e.status===404||/records/.test(e.message))throw new Error('The database table is missing. Run the setup SQL in Supabase first.');throw e}
       if(has&&has.length){saveCS();setTimeout(joinModal,0);return}
-      CS.ready=true;saveCS();updChip();toast('Online database connected. Uploading your records…');syncNow();
+      CS.ready=true;saveCS();updChip();toast('Online database connected. Uploading your records…');syncNow();checkAI();
     }catch(e){restoreCS(old);msg.textContent=(e&&e.message&&e.message!=='Failed to fetch')?e.message:'Could not reach the project. Check the URL and your internet.';msg.style.color='var(--bad)';return false}
   }});
 }
@@ -605,7 +638,17 @@ function hbars(items,fmt=v=>v){
 
 /* ============ Ollama ============ */
 let abortCtl=null;
+async function cloudChat(messages,onToken,signal){
+  let tok;try{tok=await sbToken()}catch(e){throw new Error('Cloud sign-in needed. '+e.message)}
+  let r;
+  try{r=await fetch(CS.url+'/functions/v1/ai',{method:'POST',signal,headers:{'Content-Type':'application/json',apikey:CS.key,Authorization:'Bearer '+tok},body:JSON.stringify({messages})})}
+  catch(e){if(e.name==='AbortError')throw e;throw new Error('Could not reach the cloud AI. Check your internet connection.')}
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||('The cloud AI returned status '+r.status+'.'));
+  const t=j.text||'';onToken&&onToken(t);return t;
+}
 async function ollamaChat(messages,onToken,signal){
+  if(S.ai.cloud)return cloudChat(messages,onToken,signal);
   const s=db.settings;let r;
   try{r=await fetch(s.ollamaUrl.replace(/\/$/,'')+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},signal,body:JSON.stringify({model:s.model,messages,stream:true,options:{temperature:.3}})})}
   catch(e){if(e.name==='AbortError')throw e;throw new Error(`Cannot reach Ollama at ${s.ollamaUrl}. Start it with "ollama serve". If this page is opened from a file, start Ollama with OLLAMA_ORIGINS="*".`)}
@@ -642,6 +685,14 @@ async function runAI(outEl,messages,btn){
 }
 async function checkAI(){
   const chip=$('#aiChip');chip.textContent='AI: checking…';
+  if(cloudOn()){
+    try{
+      const tok=await sbToken(),c=new AbortController();setTimeout(()=>c.abort(),8000);
+      const r=await fetch(CS.url+'/functions/v1/ai',{method:'POST',signal:c.signal,headers:{'Content-Type':'application/json',apikey:CS.key,Authorization:'Bearer '+tok},body:JSON.stringify({ping:true})});
+      const j=await r.json().catch(()=>({}));
+      if(r.ok&&j.ok&&j.hasKey){S.ai={ok:true,cloud:true,provider:j.provider,model:j.model,models:[]};chip.textContent='AI ready';chip.className='pill ok';chip.style.cursor='pointer';chip.style.border='0';return}
+    }catch(e){}
+  }
   try{
     const c=new AbortController();setTimeout(()=>c.abort(),2500);
     const r=await fetch(db.settings.ollamaUrl.replace(/\/$/,'')+'/api/tags',{signal:c.signal});const j=await r.json();
@@ -664,6 +715,21 @@ const V={};
 const empty=t=>`<div class="empty">${t}</div>`;
 
 /* ---- dashboard ---- */
+function dashShortcuts(){
+  const nNew=(db.requests||[]).filter(r=>r.status==='New').length,T=[];
+  const add=(ok,label,act,ic,extra,badge)=>{if(ok)T.push(`<button class="tile" data-act="${act}" ${extra||''}><svg class="ic" viewBox="0 0 24 24">${ic}</svg><span>${label}</span>${badge?`<i class="bdg">${badge}</i>`:''}</button>`)};
+  add(can('patients'),'Register patient','editPatient',IC.patients);
+  add(can('appointments'),'Book appointment','newAppt',IC.appointments);
+  add(can('requests'),'Patient requests','nav',IC.requests,'data-v="requests"',nNew);
+  add(can('lab'),'Laboratory','nav',IC.lab,'data-v="lab"');
+  add(can('homevisits'),'Home visits','nav',IC.homevisits,'data-v="homevisits"');
+  add(can('inventory'),'Medicines','nav',IC.inventory,'data-v="inventory"');
+  add(can('billing'),'Billing','nav',IC.billing,'data-v="billing"');
+  add(canGate(),'Register visitor','regVisitor',IC.visitors);
+  add(can('ai'),'AI assistant','nav',IC.ai,'data-v="ai"');
+  add(true,'Share app','shareApp','<path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v14"/>');
+  return `<div class="tiles">${T.join('')}</div>`;
+}
 V.dashboard=()=>{
   const t=today();
   const up=db.appointments.filter(a=>a.status==='Scheduled'&&a.date>=t).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
@@ -673,7 +739,7 @@ V.dashboard=()=>{
   const days=[...Array(7)].map((_,i)=>plus(i-6));
   const coll=days.map(d=>sum(db.invoices.flatMap(i=>i.payments).filter(p=>p.date===d).map(p=>p.amount)));
   const labels=days.map(d=>new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'short'}));
-  return `<div class="kpis">
+  return `${dashShortcuts()}<div class="kpis">
     <div class="kpi"><span>Patients</span><b>${db.patients.length}</b></div>
     <div class="kpi"><span>Appointments today</span><b>${up.filter(a=>a.date===t).length}</b></div>
     <div class="kpi ${low.length?'alert':''}"><span>Stock alerts</span><b>${low.length}</b></div>
@@ -1527,7 +1593,8 @@ function cloudCard(){
 }
 V.settings=()=>{
   const s=db.settings,models=S.ai.models;
-  return `<div class="cols"><section class="card"><header><h2>Ollama (local AI)</h2><span class="pill ${S.ai.ok?'ok':'warn'}">${S.ai.ok?'Connected':'Not reachable'}</span></header>
+  return `<div class="cols"><section class="card"><header><h2>${S.ai.cloud?'Cloud AI':'Ollama (local AI)'}</h2><span class="pill ${S.ai.ok?'ok':'warn'}">${S.ai.ok?'Connected':'Not reachable'}</span></header>
+  ${S.ai.cloud?`<p class="muted" style="margin:0">Answers come from the cloud AI you set up (${esc(S.ai.provider)}, ${esc(S.ai.model)}). Patient names are never sent. The Ollama settings below are only used if the cloud AI is unavailable.</p>`:cloudOn()?'<p class="muted" style="margin:0">The cloud AI is not set up yet, so the app is trying Ollama. Ask the admin to add the AI function in Supabase.</p>':''}
   <form id="setForm" style="display:flex;flex-direction:column;gap:12px">${fld('Ollama URL','ollamaUrl',s.ollamaUrl,'url','required')}
   ${models.length?sel('Model','model',models,s.model):fld('Model name','model',s.model,'text','required placeholder="llama3.2"')}
   ${fld('Clinic name','clinic',s.clinic)}${fld('Currency label','currency',s.currency)}${fld('Opening hours (used by the chat assistant)','hours',s.hours)}
@@ -1592,7 +1659,7 @@ const actions={
       let txt=null;try{txt=await ollamaChat([{role:'system',content:'You write short, polite SMS appointment reminders for a hospital. Maximum 300 characters. No medical details. Output only the message text.'},{role:'user',content:`Patient first name: ${p.name.split(' ')[0]}. Doctor: ${docName(a.doctorId)}. When: ${when}. Hospital: ${db.settings.clinic}. Reason (do not include if sensitive): ${a.reason}. Hours: ${db.settings.hours}.`}])}catch(e){}
       $('#'+id).value=(txt||fallback).trim();
     }
-    btn.disabled=false;if(!S.ai.ok)toast('Ollama is offline, so template reminders were used.');
+    btn.disabled=false;if(!S.ai.ok)toast('The AI is offline, so template reminders were used.');
   },
   copyRem:d=>{const el=$('#'+d.id);el.select();navigator.clipboard?.writeText(el.value).then(()=>toast('Copied.'),()=>{document.execCommand('copy');toast('Copied.')})},
   explainRisk:async(d,btn)=>{
@@ -1690,6 +1757,10 @@ Object.assign(actions,{
   cloudOff:()=>{if(!(me&&me.role==='admin'))return;setTimeout(()=>openModal('Disconnect this phone','<p style="margin:0">This phone keeps its current records but stops syncing. Other phones are not affected. You can connect again later.</p>',{submit:'Disconnect',onSubmit:()=>{CS=null;try{localStorage.removeItem(SYNC_LS)}catch(e){}updChip();toast('Disconnected.');render()}}),0)},
   printChart:d=>{const c=chartDefs().find(x=>x.k===d.k);if(c)printHTML(chartPrintHTML([c]))},
   printCharts:()=>printHTML(chartPrintHTML(chartDefs())),
+  shareApp:()=>shareApp(),
+  shareLink:()=>shareLinkNow(),
+  copyLink:async()=>{try{await navigator.clipboard.writeText(appUrl());toast('Link copied.')}catch(e){toast('Press and hold the link to copy it.','bad')}},
+  shareFile:()=>shareFileNow(),
   newRx:d=>newRx(d.id),
   addRx:(d,el)=>{el.closest('form').querySelector('#rxlines').insertAdjacentHTML('beforeend',rxLine())},
   rmRx:(d,el)=>{const b=el.closest('#rxlines');if(b&&b.children.length>1)el.closest('.rxl').remove()},
@@ -1722,7 +1793,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 /* ============ boot ============ */
-function showLogin(){$('#cloudLink').textContent=cloudOn()?'Online database connected ✓':'Connect this phone to the online database';$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
+function showLogin(){$('#demoBox').hidden=cloudOn();$('#cloudLink').textContent=cloudOn()?'Online database connected ✓':'Connect this phone to the online database';$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
 function enter(){
   $('#login').hidden=true;$('#app').hidden=false;
   $('#meName').textContent=me.name;$('#meRole').textContent=ROLE[me.role];buildNav();
