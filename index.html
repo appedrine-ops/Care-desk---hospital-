@@ -523,7 +523,7 @@ async function runDiag(){
         else if(r.status===401)done(f,'bad','The function refused the sign-in (code 401).','Open Edge Functions > ai > Settings and switch OFF "Verify JWT", then save. If it still fails, redeploy the function.');
         else if(!r.ok)done(f,'bad','Code '+r.status+': '+(j.error||j.message||'no details'),'Redeploy the function with the latest supabase-ai-function.ts.');
         else if(!j.hasKey)done(f,'bad','The function works but has no AI key.','Supabase > Edge Functions > Secrets: add GEMINI_API_KEY with your Google AI key.');
-        else{done(f,'ok','Provider: '+j.provider+', model: '+j.model);
+        else{done(f,j.version>=3?'ok':'warn','Provider: '+j.provider+', model: '+j.model+(j.version>=3?'':'. This is the OLD function code.'),j.version>=3?'':'Paste the latest supabase-ai-function.ts into Edge Functions > ai > Code and press Deploy updates.');
           const g=add('Ask the AI a test question');
           try{const c2=new AbortController();setTimeout(()=>c2.abort(),50000);
             const r2=await fetch(CS.url+'/functions/v1/ai',{method:'POST',signal:c2.signal,headers:{'Content-Type':'application/json',apikey:CS.key,Authorization:'Bearer '+tok2},body:JSON.stringify({messages:[{role:'user',content:'Reply with the single word OK.'}]})});
@@ -544,13 +544,13 @@ function cloudSetup(){
     openModal('Clinic online database',`<p style="margin:0">Connected as <b>${esc(CS.email||'clinic account')}</b>.<br><span class="muted sm">${esc(CS.url)}</span></p>
     <p style="margin:0">Status: <b>${cloudState==='ok'?'Synced':cloudState==='sync'?'Syncing…':cloudState==='auth'?'Sign in again':'Offline, will sync when the internet is back'}</b><br><span class="muted sm">Last sync: ${tm}</span></p>
     ${cloudErr?`<p class="sm" style="margin:0;color:var(--bad)">${esc(cloudErr)}</p>`:''}
-    <div class="bar" style="margin:0"><button type="button" class="btn pri" data-act="syncNow">Sync now</button><button type="button" class="btn" data-act="diag">Check connection</button>${me&&me.role==='admin'?'<button type="button" class="btn bad" data-act="cloudOff">Disconnect this phone</button>':''}</div>`,{foot:false});
+    <div class="bar" style="margin:0"><button type="button" class="btn pri" data-act="syncNow">Sync now</button><button type="button" class="btn" data-act="diag">Check connection</button>${me&&me.role==='admin'?'<button type="button" class="btn" data-act="addPhone">Add another phone</button>':''}${me&&me.role==='admin'?'<button type="button" class="btn bad" data-act="cloudOff">Disconnect this phone</button>':''}</div>`,{foot:false});
     return;
   }
   openModal('Connect to the online database',`<p class="muted" style="margin:0">Your records are kept online so every phone sees the same patients. Paste the details from your Supabase project (see the setup steps).</p>
-  ${fld('Project URL','url',CS&&CS.url||'','url','required placeholder="https://abcd1234.supabase.co" autocomplete="off"')}
-  ${fld('Public (anon) key','key',CS&&CS.key||'','text','required autocomplete="off" placeholder="eyJ... or sb_publishable_..."')}
-  ${fld('Clinic cloud email','email',CS&&CS.email||'','email','required autocomplete="off"')}
+  ${fld('Project URL','url',(CS&&CS.url)||(window.PRE&&PRE.url)||'','url','required placeholder="https://abcd1234.supabase.co" autocomplete="off"')}
+  ${fld('Public (anon) key','key',(CS&&CS.key)||(window.PRE&&PRE.key)||'','text','required autocomplete="off" placeholder="eyJ... or sb_publishable_..."')}
+  ${fld('Clinic cloud email','email',(CS&&CS.email)||(window.PRE&&PRE.email)||'','email','required autocomplete="off"')}
   ${fld('Clinic cloud password','password','','password','required autocomplete="off"')}
   <div id="cloudMsg" class="sm muted" role="status"></div>`,
   {submit:'Connect',onSubmit:async fd=>{
@@ -578,7 +578,7 @@ function joinModal(){
       if(fd.has('backup'))download('caredesk-phone-backup-'+stamp()+'.json',JSON.stringify(db),'application/json');
       SYNC_COLLS.forEach(c=>db[c]=[]);CS.snap={};CS.cursor='';
       await syncPull();CS.ready=true;CS.last=Date.now();saveCS();localSave();updChip();setChip('ok');
-      toast('Clinic data downloaded. Please sign in with your clinic account.');
+      toast('Clinic data downloaded. Now sign in with your own staff username and password.');
       me=null;sessionStorage.removeItem(SS);showLogin();
     }catch(e){CS.ready=false;saveCS();toast((e&&e.message)||'Download failed.','bad');return false}
   }});
@@ -2608,6 +2608,31 @@ Object.assign(actions,{
 });
 document.addEventListener('change',e=>{if(e.target.id==='roleSel'){const x=document.getElementById('roleDesc');if(x)x.textContent=(ROLE_INFO[e.target.value]||{}).d||''}});
 
+
+/* ---- add another phone ---- */
+const b64u=t=>btoa(unescape(encodeURIComponent(t))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const unb64u=t=>decodeURIComponent(escape(atob(t.replace(/-/g,'+').replace(/_/g,'/'))));
+function phoneLink(){return appUrl()+'#setup='+b64u(JSON.stringify({u:CS.url,k:CS.key,e:CS.email||''}))}
+function addPhoneModal(){
+  if(!cloudOn()){toast('Connect this phone to the online database first.','bad');return}
+  const link=phoneLink(),txt=(db.settings.clinic||'CareDesk')+': to use the app on your phone.\n1) Open this link in Chrome: '+link+'\n2) Enter the clinic cloud password I will give you.\n3) Sign in with your own username and password.';
+  S.phoneTxt=txt;
+  openModal('Add another phone',`<p style="margin:0">Send this link to the staff member. It fills in the project details for them. They only type the <b>clinic cloud password</b> (you give it to them in person, not in the same message), then sign in with their own staff account.</p>
+  <div class="mono sm" style="word-break:break-all;padding:8px 10px;border:1px solid var(--line);border-radius:10px">${esc(link)}</div>
+  <div class="bar" style="margin:0"><button type="button" class="btn pri" data-act="phoneWA">Send on WhatsApp</button><button type="button" class="btn" data-act="phoneCopy">Copy message</button></div>
+  <p class="muted sm" style="margin:0">Safe to share: the link holds no password. Whoever has the cloud password can read all clinic data, so give it only to staff.</p>`,{foot:false});
+}
+function checkSetupLink(h){
+  const m=/^#setup=([A-Za-z0-9_-]+)/.exec(h||location.hash);if(!m)return false;
+  try{
+    const j=JSON.parse(unb64u(m[1]));history.replaceState(null,'',location.pathname+location.search);
+    if(cloudOn())return false;
+    window.PRE={url:j.u,key:j.k,email:j.e};
+    setTimeout(()=>{cloudSetup();toast('Enter the clinic cloud password to connect this phone.')},300);return true;
+  }catch(e){return false}
+}
+Object.assign(actions,{addPhone:()=>addPhoneModal(),phoneWA:()=>openExternal('https://wa.me/?text='+encodeURIComponent(S.phoneTxt||'')),phoneCopy:()=>{(navigator.clipboard?navigator.clipboard.writeText(S.phoneTxt||''):Promise.reject()).then(()=>toast('Copied.')).catch(()=>prompt('Copy this:',S.phoneTxt||''))}});
+
 /* ============ install / offline support ============ */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
@@ -2627,7 +2652,7 @@ $('#loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
   const u=db.users.find(x=>x.username===$('#lu').value.trim().toLowerCase());
   if(u&&u.hash===await sha($('#lp').value)&&u.suspended){$('#lerr').textContent='This account is suspended. Please see the administrator.';logAct('Suspended account tried to sign in',u.username);return}
-  if(u&&u.hash===await sha($('#lp').value)){me=u;sessionStorage.setItem(SS,u.id);logAct('Signed in','');save();enter();if(me.temp)setTimeout(()=>changeMyPw(true),400)}else{$('#lerr').textContent='Wrong username or password.';logAct('Failed sign-in',$('#lu').value.trim().slice(0,40));save()}
+  if(u&&u.hash===await sha($('#lp').value)){me=u;sessionStorage.setItem(SS,u.id);logAct('Signed in','');save();enter();if(me.temp)setTimeout(()=>changeMyPw(true),400)}else{$('#lerr').textContent=cloudOn()?'Wrong username or password.':'Wrong username or password. If your account was made on another phone, tap Connect this phone to the online database below first.';logAct('Failed sign-in',$('#lu').value.trim().slice(0,40));save()}
 });
 
 
@@ -2635,7 +2660,9 @@ $('#loginForm').addEventListener('submit',async e=>{
   await loadDb();
   if(cloudOn())syncNow();
   const sid=sessionStorage.getItem(SS);me=db.users.find(u=>u.id===sid&&!u.suspended)||null;
+  const setupHash=location.hash;
   if(me)enter();else showLogin();
+  checkSetupLink(setupHash);
 })();
 </script>
 </body>
