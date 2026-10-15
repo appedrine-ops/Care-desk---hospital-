@@ -48,7 +48,7 @@ textarea{resize:vertical}
 
   <form class="card" id="f" autocomplete="on">
     <label>What do you need?
-      <select id="type"><option>Clinic appointment</option><option id="hvopt">Home visit</option><option>Question</option></select>
+      <select id="type"><option>Clinic appointment</option><option id="hvopt">Home visit</option><option>Lab test</option><option>Medicine or refill</option><option>Vaccination</option><option>Medical report or certificate</option><option>Ward or admission enquiry</option><option>Question</option><option>Other</option></select>
     </label>
     <div class="row">
       <label>Your name<input id="name" required autocomplete="name"></label>
@@ -90,10 +90,22 @@ textarea{resize:vertical}
   if(!hv)$('hvopt').remove();
   var today=new Date();today.setMinutes(today.getMinutes()-today.getTimezoneOffset());
   $('date').min=today.toISOString().slice(0,10);
+  var HINT={
+    'Clinic appointment':'Who is the patient (age)? What is the problem?',
+    'Home visit':'Who is the patient (age)? What is the problem? Can the patient walk?',
+    'Lab test':'Which test do you need, if you know? Did a doctor ask for it?',
+    'Medicine or refill':'Which medicine and dose? Do you have a prescription?',
+    'Vaccination':'Who needs the vaccine (age)? Which vaccine?',
+    'Medical report or certificate':'What is it for (school, work, travel, insurance)?',
+    'Ward or admission enquiry':'What would you like to know about beds, visiting or costs?',
+    'Question':'What would you like to ask?',
+    'Other':'Tell us what you need.'};
+  var WHEN=['Clinic appointment','Home visit','Lab test','Vaccination'];
   function sync(){
     var t=$('type').value;
     $('home').hidden=t!=='Home visit';
-    $('when').hidden=t==='Question';
+    $('when').hidden=WHEN.indexOf(t)<0;
+    $('msg').placeholder=HINT[t]||'';
   }
   $('type').addEventListener('change',sync);sync();
   function build(){
@@ -104,7 +116,7 @@ textarea{resize:vertical}
     L.push('Request: '+t);
     L.push('Name: '+$('name').value.trim());
     L.push('Phone: '+$('phone').value.trim());
-    if(t!=='Question'&&($('date').value||$('time').value))L.push('Preferred time: '+($('date').value||'any day')+($('time').value?' at '+$('time').value:''));
+    if(WHEN.indexOf(t)>=0&&($('date').value||$('time').value))L.push('Preferred time: '+($('date').value||'any day')+($('time').value?' at '+$('time').value:''));
     if(t==='Home visit'&&$('addr').value.trim())L.push('Address: '+$('addr').value.trim());
     if($('msg').value.trim())L.push('Details: '+$('msg').value.trim());
     return L.join('\n');
