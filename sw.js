@@ -3,7 +3,8 @@ const CACHE = 'caredesk-v1';
 const SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // Cache each file separately so one missing file can never stop the service worker from installing.
+  e.waitUntil(caches.open(CACHE).then(c => Promise.all(SHELL.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
