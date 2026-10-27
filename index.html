@@ -72,6 +72,38 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 .spk{display:block;width:100%;height:28px;margin-top:6px}.spk .sl{fill:none;stroke:var(--brand);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}.spk .sa{fill:var(--brand);opacity:.13;stroke:none}
 .trd{font-size:12px;font-weight:600;margin-top:2px;color:var(--muted)}.trd.up{color:var(--ok)}.trd.dn{color:var(--bad)}
+.hero{position:relative;text-align:center;padding:6px 0 4px}
+.hero .shield{width:min(58vw,230px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 26px var(--sc,#4f8cff));overflow:visible}
+.hero .sn{font:600 66px/1 var(--sans);fill:#0d2a5c}
+.hero .lbl{margin:6px 0 14px;font-size:17px;color:var(--muted);letter-spacing:.02em}
+.hero .lbl b{color:var(--sc,#4f8cff)}
+.hbtn{display:block;margin:0 auto;border:0;border-radius:999px;padding:15px 0;width:min(100%,300px);font:inherit;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(135deg,#2c7bff,#1a62e6);cursor:pointer;box-shadow:0 8px 22px rgba(44,123,255,.35)}
+.hbtn:active{transform:scale(.98)}
+.banner{display:flex;align-items:center;gap:14px;margin:22px 0 14px;padding:14px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+.banner .bi{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:var(--brand)}
+.banner.warn .bi{background:var(--warn-bg);color:var(--warn)}.banner.bad .bi{background:var(--bad-bg);color:var(--bad)}
+.banner .bi svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.banner .bt{flex:1;min-width:0}.banner .bt b{display:block;font-size:16px}.banner .bt span{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.banner .btn.pri{flex:none;border-radius:999px;padding:10px 20px}
+.attmore{display:block;margin:-6px auto 14px;border:0;background:none;color:var(--brand);font:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:4px 10px}
+.mods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:8px}
+@media (min-width:640px){.mods{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1000px){.mods{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.mod{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:18px 16px;min-height:150px;border:1px solid var(--line);border-radius:22px;background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-width:0}
+.mod:active{transform:scale(.985)}
+.mod .mi{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:var(--c,#2f7df6);box-shadow:0 6px 14px color-mix(in srgb,var(--c,#2f7df6) 40%,transparent)}
+.mod .mi svg{width:27px;height:27px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mod b{font-size:18px;font-weight:500;line-height:1.2}
+.mod .st{font-size:14px;color:var(--muted);line-height:1.3;margin-top:-8px}
+.mod .st.bad{color:#ff5b5b}.mod .st.warn{color:var(--warn)}
+.mod .dot{position:absolute;top:14px;right:14px;width:11px;height:11px;border-radius:50%;background:#ff4d4d}
+.dw .dsec{margin-top:26px}
+.side .about{order:3;margin-top:10px;padding:10px 4px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}
+.side .about button{border:0;background:none;color:var(--brand);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.side .brand{order:0}.side .me{order:1;border:1px solid var(--line);border-radius:18px;padding:14px;margin:6px 0 10px;background:var(--bg)}.side .nav{order:2;overflow-y:auto;flex:1}
+.moreLink{display:block;margin:-4px auto 14px;border:0;background:none;color:var(--brand);font:inherit;font-size:13px;font-weight:600;padding:6px 10px;cursor:pointer}
+.dw .tabs{margin-top:18px}
+.dw>.dtip{margin:20px 0 4px}
 .dtip{margin:6px 0 14px;padding:9px 12px;border-radius:10px;background:var(--soft);color:var(--ink);font-size:13px}
 .tile:hover{border-color:var(--c,var(--brand))}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -333,6 +365,7 @@ table.ros .rtoday{background:var(--soft)}
       <div><b id="meName"></b><span class="muted sm" id="meRole"></span></div>
       <div class="acts"><button class="btn sm" data-act="myPw">Password</button><button class="btn sm" data-act="lang" title="Language">EN / LG</button><button class="btn sm" data-act="theme" title="Light or dark mode">Light / dark</button><button class="btn sm" data-act="logout">Sign out</button></div>
     </div>
+    <div class="about"><span>CareDesk · version 2.1</span><button data-act="shareApp">Share app</button></div>
   </aside>
   <div class="scrim" data-act="closeNav"></div>
   <div class="main">
@@ -851,6 +884,7 @@ const V={};
 const empty=t=>`<div class="empty">${t}</div>`;
 
 /* ---- dashboard ---- */
+let dashShortcutsList;
 function dashShortcuts(){
   const nNew=(db.requests||[]).filter(r=>r.status==='New').length,T=[];
   const add=(ok,label,act,ic,extra,badge)=>{if(ok)T.push(`<button class="tile" style="${tileTone(extra,act)}" data-act="${act}" ${extra||''}><svg class="ic" viewBox="0 0 24 24">${ic}</svg><span>${label}</span>${badge?`<i class="bdg">${badge}</i>`:''}</button>`)};
@@ -885,7 +919,8 @@ V.dashboard=()=>{
   const labels=days.map(d=>new Date(d+'T00:00').toLocaleDateString(undefined,{weekday:'short'}));
   const vToday=db.visits.filter(v=>v.date===t).length,waiting=(db.queue||[]).filter(q=>q.day===t&&q.status==='Waiting').length;
   const K=[];
-  const kp=(ok,l,v,cls,go,ex)=>{if(ok)K.push(`<div class="kpi ${cls||''}"${go?` data-act="nav" data-v="${go}" role="button" tabindex="0"`:''}><span>${l}</span><b>${v}</b>${ex||''}</div>`)};
+  const RK=['Waiting in queue','Appointments today','Collected today','Visits today','Stock alerts','Outstanding bills','Admitted now','Patients','Staff in now','Online now'];
+  const kp=(ok,l,v,cls,go,ex)=>{if(ok)K.push([RK.indexOf(l),`<div class="kpi ${cls||''}"${go?` data-act="nav" data-v="${go}" role="button" tabindex="0"`:''}><span>${l}</span><b>${v}</b>${ex||''}</div>`])};
   const vS=days.map(d=>db.visits.filter(v=>v.date===d).length);
   kp(can('patients'),'Patients',db.patients.length,'','patients');
   kp(isClin(),'Visits today',vToday,'','',sparkTrend(vS,true,v=>v,'visits'));
@@ -898,22 +933,97 @@ V.dashboard=()=>{
   kp(me.role==='admin','Online now',presOnline().length,'','chat');
   kp(me.role==='admin','Staff in now',db.users.filter(u=>attOpenOf(u.id)).length,'','attendance');
   const rise=S.rise;S.rise=false;
-  return `<div class="dw${rise?' rise':''}"><div class="dhead"><div><h2 class="dgreet" data-greet="1">${greetText(me&&me.name)}</h2><div class="muted sm">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div><button class="btn" data-act="printCharts">Print dashboard report</button></div>
-  <p class="dtip">💡 ${esc(dayTip())}</p>
-  <div class="kpis">${K.join('')}</div>${dashAlerts()}<h3 class="dsec">Quick actions</h3>${dashShortcuts()}<h3 class="dsec">Today at a glance</h3>
-  <div class="cols">
-    ${can('appointments')?`<section class="card"><header><h2>Upcoming appointments</h2><button class="btn sm" data-act="nav" data-v="appointments">View all</button></header>
-      ${up.length?`<div class="list">${up.slice(0,6).map(a=>`<div class="row"><div><b>${esc(pname(a.patientId))}</b><div class="muted sm">${esc(a.reason)} · ${esc(docName(a.doctorId))}</div></div><div class="right nowrap"><b>${a.time}</b><div class="muted sm">${a.date===t?'Today':fdate(a.date)}</div></div></div>`).join('')}</div>`:empty('No upcoming appointments.')}</section>`:''}
-    ${can('queue')?queueRingCard():''}
-    ${can('billing')?`<section class="card"><header><h2>Collected, last 7 days</h2></header>${barChart(coll,labels,v=>v>=1000?Math.round(v/1000)+'k':v)}<p class="muted sm" style="margin:8px 0 0">Payments received per day (${esc(db.settings.currency)}).</p></section>`:''}
-    ${isClin()?`<section class="card"><header><h2>Currently admitted</h2></header>
-      ${adm.length?`<div class="list">${adm.map(v=>`<div class="row"><div><b>${esc(pname(v.patientId))}</b><div class="muted sm">${esc(v.diagnosis)}</div></div><span class="muted sm nowrap">Day ${dayDiff(v.date,t)+1}</span></div>`).join('')}</div>`:empty('No inpatients.')}</section>`:''}
-    ${chartDefs().map(chartCard).join('')}
-    ${teamNowCard()}${opsCard()}${can('roster')?rosterTodayCard():''}
-    ${can('inventory')?`<section class="card"><header><h2>Stock alerts</h2><button class="btn sm" data-act="nav" data-v="inventory">Inventory</button></header>
-      ${low.length?`<div class="list">${low.slice(0,6).map(m=>{const s=stockState(m);return `<div class="row"><div><b>${esc(m.name)}</b><div class="muted sm">${m.stock} ${esc(m.unit)} left · reorder at ${m.reorder}</div></div>${pill(s[0],s[1])}</div>`}).join('')}</div>`:empty('All stock levels are healthy.')}</section>`:''}
-  </div></div>`;
+  K.sort((x,y)=>x[0]-y[0]);
+  const kAll=K.map(x=>x[1]),kTop=kAll.slice(0,4),kRest=kAll.slice(4);
+  const todayCols=[
+    can('appointments')?`<section class="card"><header><h2>Upcoming appointments</h2><button class="btn sm" data-act="nav" data-v="appointments">View all</button></header>
+      ${up.length?`<div class="list">${up.slice(0,6).map(a=>`<div class="row"><div><b>${esc(pname(a.patientId))}</b><div class="muted sm">${esc(a.reason)} · ${esc(docName(a.doctorId))}</div></div><div class="right nowrap"><b>${a.time}</b><div class="muted sm">${a.date===t?'Today':fdate(a.date)}</div></div></div>`).join('')}</div>`:empty('No upcoming appointments.')}</section>`:'',
+    can('queue')?queueRingCard():'',
+    isClin()?`<section class="card"><header><h2>Currently admitted</h2></header>
+      ${adm.length?`<div class="list">${adm.map(v=>`<div class="row"><div><b>${esc(pname(v.patientId))}</b><div class="muted sm">${esc(v.diagnosis)}</div></div><span class="muted sm nowrap">Day ${dayDiff(v.date,t)+1}</span></div>`).join('')}</div>`:empty('No inpatients.')}</section>`:'',
+    can('inventory')?`<section class="card"><header><h2>Stock alerts</h2><button class="btn sm" data-act="nav" data-v="inventory">Inventory</button></header>
+      ${low.length?`<div class="list">${low.slice(0,6).map(m=>{const s=stockState(m);return `<div class="row"><div><b>${esc(m.name)}</b><div class="muted sm">${m.stock} ${esc(m.unit)} left · reorder at ${m.reorder}</div></div>${pill(s[0],s[1])}</div>`}).join('')}</div>`:empty('All stock levels are healthy.')}</section>`:''
+  ].filter(Boolean);
+  const trendCols=chartDefs().map(chartCard);
+  const teamCols=[teamNowCard(),opsCard(),can('roster')?rosterTodayCard():''].filter(Boolean);
+  const TABS=[['today','Today',todayCols],['trends','Trends',trendCols],['team','Team',teamCols]].filter(x=>x[2].length);
+  let tab=S.dtab;if(!TABS.some(x=>x[0]===tab))tab=TABS.length?TABS[0][0]:'today';
+  const cur=TABS.find(x=>x[0]===tab);
+  const tabsHtml=TABS.length>1?`<div class="tabs" role="tablist">${TABS.map(x=>`<button role="tab" aria-selected="${x[0]===tab}" data-act="dashTab" data-t="${x[0]}">${x[1]}</button>`).join('')}</div>`:'';
+  const qa=(dashShortcutsList?dashShortcutsList():[]).filter(h=>!/data-act="nav"/.test(h));
+  const H=homeHero();
+  return `<div class="dw${rise?' rise':''}"><div class="dhead"><div><h2 class="dgreet" data-greet="1">${greetText(me&&me.name)}</h2><div class="muted sm">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div><button class="btn sm" data-act="printCharts">Print report</button></div>
+  ${H}
+  <div class="mods">${homeMods()}</div>
+  ${qa.length?`<h3 class="dsec">Quick actions</h3><div class="tiles">${qa.join('')}</div>`:''}
+  <h3 class="dsec">Today in numbers</h3>
+  <div class="kpis">${kTop.join('')}${S.kpiMore?kRest.join(''):''}</div>${kRest.length?`<button class="moreLink" data-act="kpiMore">${S.kpiMore?'Show fewer numbers':'Show '+kRest.length+' more numbers'}</button>`:''}
+  ${tabsHtml}<div class="cols">${cur?cur[2].join(''):''}</div>
+  <p class="dtip">💡 ${esc(dayTip())}</p></div>`;
 };
+/* ---- home screen: score shield, banner, module tiles ---- */
+function attItems(){
+  const A=[],add=(w,ic,title,sub,btn,act,data,tone)=>A.push({w,ic,title,sub,btn,act,data:data||'',tone:tone||'warn'});
+  const bell='<path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8M13.700 21a2 2 0 01-3.400 0"/>',alert='<path d="M12 3l10 18H2zM12 10v5M12 18h.01"/>';
+  try{
+    if(me.role==='admin'&&(S.defpw||[]).length)add(10,alert,S.defpw.length+' account'+(S.defpw.length>1?'s':'')+' still use the demo password','Change them before real patients are added.','Fix now','nav','users','bad');
+    if(can('inventory')){
+      const g=expSplit();
+      if(g.exp.length)add(Math.min(20,g.exp.length*5),alert,g.exp.length+' expired medicine'+(g.exp.length>1?'s':'')+' in stock','Remove them from the shelf.','View','expiryGo','','bad');
+      if(g.d30.length)add(Math.min(10,g.d30.length*2),alert,g.d30.length+' medicine'+(g.d30.length>1?'s':'')+' expiring within 30 days','Plan to use or return them.','View','expiryGo');
+      const bad=db.medicines.filter(m=>stockState(m)[1]==='bad').length,wr=db.medicines.filter(m=>{const c=stockState(m)[1];return c!=='ok'&&c!=='bad'}).length;
+      if(bad)add(Math.min(12,bad*3),alert,bad+' medicine'+(bad>1?'s':'')+' out of stock or very low','Reorder soon.','Inventory','nav','inventory','bad');
+      if(wr)add(Math.min(8,wr),alert,wr+' medicine'+(wr>1?'s':'')+' running low','Reorder level reached.','Inventory','nav','inventory');
+    }
+    if(can('requests')){const n=(db.requests||[]).filter(r=>r.status==='New').length;if(n)add(Math.min(6,n*2),bell,n+' new patient request'+(n>1?'s':''),'Waiting for a reply.','Open','nav','requests')}
+    if(can('queue')){const w=(db.queue||[]).filter(q=>q.day===today()&&q.status==='Waiting').length;if(w>=6)add(5,bell,w+' patients waiting in the queue','Consider opening another desk.','Queue','nav','queue')}
+    if(can('appointments')){const rm=remindList().filter(a=>!a.reminded).length,vx=vxDueList(7).length;
+      if(rm)add(Math.min(6,rm*2),bell,rm+' appointment reminder'+(rm>1?'s':'')+' not sent',(S.rday===0?'Today':'Tomorrow')+' · one tap each on WhatsApp','Send','remGo');
+      if(vx)add(Math.min(6,vx*2),bell,vx+' vaccine or antenatal visit'+(vx>1?'s':'')+' due','This week or overdue.','View','schedGo')}
+    if(can('referrals')){const w=(db.referrals||[]).filter(r=>refOpen(r)&&refAgeDays(r)>=3).length;if(w)add(Math.min(9,w*3),bell,w+' referral'+(w>1?'s':'')+' waiting for feedback','Sent 3 or more days ago.','View','nav','referrals')}
+    if(can('attendance')&&!attOpenOf(me.id)&&attExpected(me.id,today(),new Date()))add(2,bell,'You are rostered today and not checked in','','Check in','attIn');
+  }catch(e){}
+  return A.sort((x,y)=>y.w-x.w);
+}
+function homeHero(){
+  const A=attItems(),sc=Math.max(0,100-A.reduce((n,x)=>n+x.w,0));
+  const band=sc>=95?['Excellent','#2fbf8f']:sc>=85?['Good','#4f8cff']:sc>=70?['Optimizable','#f0a020']:['Needs attention','#ef5350'];
+  const top=A[0],more=A.length-1;
+  const banner=top?`<div class="banner ${top.tone}"><div class="bi"><svg viewBox="0 0 24 24">${top.ic}</svg></div><div class="bt"><b>${esc(top.title)}</b>${top.sub?`<span>${esc(top.sub)}</span>`:''}</div><button class="btn pri" data-act="${top.act}"${top.data?` data-v="${top.data}"`:''}>${esc(top.btn)}</button></div>`
+    :`<div class="banner"><div class="bi"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div><div class="bt"><b>All clear</b><span>Nothing needs your attention right now.</span></div></div>`;
+  return `<div class="hero" style="--sc:${band[1]}"><svg class="shield" viewBox="0 0 200 220" role="img" aria-label="Clinic health score ${sc} out of 100, ${band[0]}"><defs><radialGradient id="shg" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#dbe7ff"/><stop offset="1" stop-color="${band[1]}"/></radialGradient></defs><path d="M100 8C128 24 158 30 186 28c6 74-8 140-86 186C22 168 8 102 14 28c28 2 58-4 86-20z" fill="url(#shg)"/><text class="sn" x="100" y="128" text-anchor="middle">${sc}</text></svg>
+  <div class="lbl"><b>${band[0]}</b> · clinic score</div><button class="hbtn" data-act="recheck">Re-check</button></div>${banner}${more>0?`<button class="attmore" data-act="attToggle">${S.attOpen?'Hide the list':'See '+more+' more thing'+(more>1?'s':'')+' to check'}</button>`:''}${S.attOpen?dashAlerts():''}`;
+}
+const MODC={patients:'#2f7df6',appointments:'#7c5cff',queue:'#16b8a6',requests:'#ff7a45',homevisits:'#f5a300',lab:'#1fc27a',inventory:'#ef5a8a',billing:'#00a6d6',roster:'#8b6cff',attendance:'#4e9bff',chat:'#2fc46d',referrals:'#ff6b6b',ai:'#a855f7',visitors:'#14b8c4',activity:'#8892a6',users:'#5b8def',settings:'#7a8599'};
+function modStat(m){
+  const t=today();
+  try{switch(m){
+    case 'patients':return [db.patients.length+' registered',''];
+    case 'appointments':{const x=db.appointments.filter(a=>a.status==='Scheduled'&&a.date===t).length;return [x+' today',''];}
+    case 'queue':{const w=(db.queue||[]).filter(q=>q.day===t&&q.status==='Waiting').length;return [w+' waiting',w>=6?'warn':''];}
+    case 'requests':{const x=(db.requests||[]).filter(r=>r.status==='New').length;return x?[x+' new','bad']:['No new requests',''];}
+    case 'homevisits':{const x=db.homeVisits.filter(h=>h.status==='Requested').length;return x?[x+' requested','warn']:['No new requests',''];}
+    case 'referrals':{const x=(db.referrals||[]).filter(refOpen).length;return [x+' open',''];}
+    case 'lab':{const x=db.labs.filter(l=>l.status==='Ordered').length;return x?[x+' awaiting results','warn']:['No pending tests',''];}
+    case 'inventory':{const x=db.medicines.filter(m=>stockState(m)[1]!=='ok').length;return x?[x+' stock alert'+(x>1?'s':''),'bad']:['Stock healthy',''];}
+    case 'billing':{const x=sum(db.invoices.map(invBal));return [money(x)+' outstanding',''];}
+    case 'roster':return ['Who is on duty',''];
+    case 'attendance':return [attOpenOf(me.id)?'You are checked in':'Check in / out',''];
+    case 'chat':{const x=chatUnread();return x?[x+' unread','bad']:['Team messages',''];}
+    case 'ai':return S.ai&&S.ai.ok?['Ready','']:['Offline','warn'];
+    case 'visitors':{const x=db.visitors.filter(v=>iso(new Date(v.timeIn))===t).length;return [x+' today',''];}
+    case 'activity':return ['Who did what',''];
+    case 'users':{const d=(S.defpw||[]).length;return d?[d+' use demo password','bad']:[db.users.length+' accounts',''];}
+    case 'settings':return [cloudOn()?'Cloud connected':'This device only',cloudOn()?'':'warn'];
+  }}catch(e){}
+  return ['',''];
+}
+function homeMods(){
+  return Object.keys(PERM).filter(m=>m!=='dashboard'&&can(m)&&IC[m]&&TITLES[m]).map(m=>{
+    const st=modStat(m);
+    return `<button class="mod" style="--c:${MODC[m]||'#2f7df6'}" data-act="nav" data-v="${m}"><span class="mi"><svg viewBox="0 0 24 24">${IC[m]}</svg></span><b>${TITLES[m].split(' &')[0]}</b>${st[0]?`<span class="st ${st[1]}">${esc(st[0])}</span>`:''}${st[1]==='bad'?'<i class="dot"></i>':''}</button>`;
+  }).join('');
+}
 function sparkTrend(vals,goodUp,fmt,what){
   const n=vals.length,mx=Math.max(...vals,1),W=100,H=28,pad=3;
   const pts=vals.map((v,i)=>[pad+i*(W-2*pad)/(n-1),H-pad-(v/mx)*(H-2*pad)]);
@@ -2551,13 +2661,14 @@ dashShortcuts=function(){
   add(can('referrals'),'Referrals','nav',IC.referrals,'data-v="referrals"');
   add(can('chat'),'Team chat','nav',IC.chat,'data-v="chat"');
   add(can('dashboard'),'Weekly summary','weekly','<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>');
-  return base.replace(/<\/div>$/,T.join('')+'</div>');
+  return (base.replace(/<\/div>$/,T.join('')+'</div>')).replace(/^<div class="tiles">|<\/div>$/g,'').split(/(?=<button class="tile")/).filter(Boolean);
 };
-
+dashShortcutsList=dashShortcuts;
 /* ---- actions for the new features ---- */
 const copyText=t=>navigator.clipboard?navigator.clipboard.writeText(t).then(()=>toast('Copied.'),()=>toast('Press and hold to copy.','bad')):toast('Press and hold to copy.','bad');
 Object.assign(actions,{
   actMore:()=>{S.actmore=true;render()},
+  dashTab:d=>{S.dtab=d.t;render()},attToggle:()=>{S.attOpen=!S.attOpen;render()},recheck:()=>{S.rise=true;try{sysChecks()}catch(e){}render();toast('Checked just now.')},kpiMore:()=>{S.kpiMore=!S.kpiMore;render()},tilesMore:()=>{S.tilesMore=!S.tilesMore;render()},
   actCsv:()=>download('activity-log-'+today()+'.csv',csv([['When','Who','Role','What','Details'],...auditList().map(a=>[a.ts,a.user,a.role,a.action,a.detail])]),'text/csv'),
   actPrint:()=>printHTML(letterhead()+'<h2>Activity log</h2><p>Printed '+fdate(today())+' by '+esc(me.name)+'</p><table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>'+auditList().slice(0,400).map(a=>'<tr><td>'+esc(fdtl(a.ts))+'</td><td>'+esc(a.user)+'</td><td><b>'+esc(a.action)+'</b></td><td>'+esc(a.detail)+'</td></tr>').join('')+'</tbody></table>'),
   myPw:()=>changeMyPw(false),
