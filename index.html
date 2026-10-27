@@ -72,6 +72,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 .spk{display:block;width:100%;height:28px;margin-top:6px}.spk .sl{fill:none;stroke:var(--brand);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}.spk .sa{fill:var(--brand);opacity:.13;stroke:none}
 .trd{font-size:12px;font-weight:600;margin-top:2px;color:var(--muted)}.trd.up{color:var(--ok)}.trd.dn{color:var(--bad)}
+.logo.has{background:transparent;border:1px solid var(--line)}.logo img{width:100%;height:100%;object-fit:contain;border-radius:inherit;display:block}
+.dl{display:flex;align-items:center;gap:12px;min-width:0}.dl>div{min-width:0}
+.hlogo{width:52px;height:52px;flex:none;border-radius:14px;object-fit:contain;background:#fff;border:1px solid var(--line);padding:3px}
+.logoRow{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.logoRow .pv{width:84px;height:84px;border-radius:18px;border:1px dashed var(--line);display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:12px;text-align:center;overflow:hidden}.logoRow .pv img{width:100%;height:100%;object-fit:contain}
+@media (max-width:520px){body[data-view="dashboard"] .topbar .title{display:none}}
 .hero{position:relative;text-align:center;padding:6px 0 4px}
 .hero .shield{width:min(58vw,230px);height:auto;display:block;margin:0 auto;filter:drop-shadow(0 0 26px var(--sc,#4f8cff));overflow:visible}
 .hero .sn{font:600 66px/1 var(--sans);fill:#0d2a5c}
@@ -952,7 +957,7 @@ V.dashboard=()=>{
   const tabsHtml=TABS.length>1?`<div class="tabs" role="tablist">${TABS.map(x=>`<button role="tab" aria-selected="${x[0]===tab}" data-act="dashTab" data-t="${x[0]}">${x[1]}</button>`).join('')}</div>`:'';
   const qa=(dashShortcutsList?dashShortcutsList():[]).filter(h=>!/data-act="nav"/.test(h));
   const H=homeHero();
-  return `<div class="dw${rise?' rise':''}"><div class="dhead"><div><h2 class="dgreet" data-greet="1">${greetText(me&&me.name)}</h2><div class="muted sm">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div><button class="btn sm" data-act="printCharts">Print report</button></div>
+  return `<div class="dw${rise?' rise':''}"><div class="dhead"><div class="dl">${db.settings.logo?`<img class="hlogo" src="${db.settings.logo}" alt="">`:''}<div><h2 class="dgreet" data-greet="1">${greetText(me&&me.name)}</h2><div class="muted sm">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</div></div></div><button class="btn sm" data-act="printCharts">Print</button></div>
   ${H}
   <div class="mods">${homeMods()}</div>
   ${qa.length?`<h3 class="dsec">Quick actions</h3><div class="tiles">${qa.join('')}</div>`:''}
@@ -1302,7 +1307,7 @@ function viewInvoice(id){
 }
 function invoiceHTML(i){
   const p=pat(i.patientId);
-  return `<h1 style="font:600 24px var(--serif)">${esc(db.settings.clinic)}</h1><p>Invoice <b>${i.id}</b> · ${fdate(i.date)}<br>Patient: ${esc(p?.name)} (${p?.id})</p><table><thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${i.items.map(x=>`<tr><td>${esc(x.desc)}</td><td>${x.qty}</td><td>${money(x.price)}</td><td>${money(x.qty*x.price)}</td></tr>`).join('')}</tbody></table><p style="text-align:right">Total: <b>${money(invTotal(i))}</b><br>Paid: ${money(invPaid(i))}<br>Balance: <b>${money(invBal(i))}</b></p>`;
+  return `<h1 style="font:600 24px var(--serif)">${logoImg(44)}${esc(db.settings.clinic)}</h1><p>Invoice <b>${i.id}</b> · ${fdate(i.date)}<br>Patient: ${esc(p?.name)} (${p?.id})</p><table><thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Amount</th></tr></thead><tbody>${i.items.map(x=>`<tr><td>${esc(x.desc)}</td><td>${x.qty}</td><td>${money(x.price)}</td><td>${money(x.qty*x.price)}</td></tr>`).join('')}</tbody></table><p style="text-align:right">Total: <b>${money(invTotal(i))}</b><br>Paid: ${money(invPaid(i))}<br>Balance: <b>${money(invBal(i))}</b></p>`;
 }
 function billingStats(days){
   const from=plus(-days+1),inv=db.invoices.filter(i=>i.date>=from);
@@ -1691,7 +1696,13 @@ function sampleOps(){
 const canRx=()=>['admin','doctor'].includes(me.role);
 const PAYMETHODS=['Cash','MTN MoMo','Airtel Money','Card','Bank transfer','Insurance'];
 const REFMETHODS=['MTN MoMo','Airtel Money','Bank transfer','Card'];
-const letterhead=()=>{const s=db.settings;return `<div style="border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:14px"><div style="font:600 24px Georgia,serif">${esc(s.clinic)}</div><div style="font-size:13px">${[s.clinicPhone&&'Tel '+esc(s.clinicPhone),s.clinicEmail&&esc(s.clinicEmail),esc(s.hours||'')].filter(Boolean).join(' · ')}</div></div>`};
+const logoImg=h=>db.settings&&db.settings.logo?`<img src="${db.settings.logo}" alt="" style="height:${h||54}px;width:auto;vertical-align:middle;margin-right:12px">`:'';
+const letterhead=()=>{const s=db.settings;return `<div style="border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:14px;display:flex;align-items:center">${logoImg(56)}<div><div style="font:600 24px Georgia,serif">${esc(s.clinic)}</div><div style="font-size:13px">${[s.clinicPhone&&'Tel '+esc(s.clinicPhone),s.clinicEmail&&esc(s.clinicEmail),esc(s.hours||'')].filter(Boolean).join(' · ')}</div></div></div>`};
+const PLUS='<svg class="ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>';
+function applyLogo(){
+  const lg=db.settings&&db.settings.logo;
+  document.querySelectorAll('#side .logo,#login .logo').forEach(e=>{e.classList.toggle('has',!!lg);e.innerHTML=lg?`<img src="${lg}" alt="">`:PLUS});
+}
 const sigLine=name=>`<div style="margin-top:48px"><div style="border-top:1px solid #000;width:260px;padding-top:4px">${esc(name)}</div><div style="font-size:12px">Signature and stamp</div></div>`;
 const ptLine=p=>`<p><b>${esc(p.name)}</b> · ${ageOf(p.dob)} yrs · ${p.sex==='M'?'Male':'Female'} · ${esc(p.id)}${p.phone?' · '+esc(p.phone):''}</p>`;
 
@@ -1921,6 +1932,10 @@ V.settings=()=>{
   ${fld('Home visit call-out fee','homeFee',s.homeFee||0,'number','min="0"')}${fld('Review reminder after (days)','recallDays',s.recallDays||90,'number','min="7" max="365"')}
   <div class="bar" style="margin:0"><button class="btn pri">Save and test connection</button></div></form>
   <h4>Setup</h4><ol class="muted" style="padding-left:18px;margin:0"><li>Install Ollama and run <span class="mono">ollama pull ${esc(s.model)}</span></li><li>Start the server with <span class="mono">OLLAMA_ORIGINS="*" ollama serve</span> so this page may call it</li><li>Everything stays on this computer.</li></ol></section>
+  <section class="card"><header><h2>Clinic logo</h2></header>
+    <div class="logoRow"><div class="pv">${s.logo?`<img src="${s.logo}" alt="Clinic logo">`:'No logo yet'}</div>
+    <div class="bar" style="margin:0"><label class="btn pri" style="cursor:pointer">${s.logo?'Change logo':'Choose logo'}<input type="file" id="logoFile" accept="image/*" hidden></label>${s.logo?'<button class="btn" data-act="removeLogo">Remove</button>':''}</div></div>
+    <p class="muted sm" style="margin:10px 0 0">Shown on the home screen, the menu, the sign-in page and every printout. A square picture on a plain background looks best.</p></section>
   <section class="card"><header><h2>Data</h2></header><p class="muted">Records live in this browser's storage. Export a backup regularly.</p>
   <div class="bar"><button class="btn" data-act="backup">Download backup</button><label class="btn" style="cursor:pointer">Restore backup<input type="file" id="restore" accept="application/json" hidden></label></div>
   <h4>Sample data</h4><p class="muted">The system opens with fictional sample patients. Reset replaces everything with fresh samples; clear removes all records but keeps staff accounts.</p>
@@ -1937,7 +1952,7 @@ function render(){
   $('#view').innerHTML=V[v]();
   roleFilter($('#view'));
   if(v==='ai')bindAI();
-  $('#sideClinic').textContent=db.settings.clinic;
+  $('#sideClinic').textContent=db.settings.clinic;applyLogo();document.body.dataset.view=v;
 }
 const actions={
   nav:d=>go(d.v),goBack:()=>{const p=NAVH.pop();if(p)go(p[0],p[1],true);else go(homeView())},openNav:()=>document.body.classList.add('nav-open'),closeNav:()=>document.body.classList.remove('nav-open'),closeModal,goSettings:()=>go('settings'),aiChip:()=>{if(cloudOn()&&!(S.ai&&S.ai.cloud))runDiag();else if(can('settings'))go('settings');else toast(S.ai&&S.ai.ok?'AI is ready.':'AI is not available right now.')},
@@ -2006,6 +2021,12 @@ const actions={
 };
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const f=actions[t.dataset.act];if(f){if(me&&!actGuard(t.dataset.act))return;f(t.dataset,t,e)}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('tr.click'))e.target.click()});
+document.addEventListener('change',e=>{
+  if(e.target.id!=='logoFile')return;const f=e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{const M=256,k=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);db.settings.logo=c.toDataURL('image/png');logAct('Clinic logo changed','');save();toast('Logo saved.');render();applyLogo()};
+  im.onerror=()=>{URL.revokeObjectURL(url);toast('That picture could not be read.','bad')};im.src=url;
+});
 document.addEventListener('input',e=>{const f=e.target.dataset?.filter;if(f){S.q=e.target.value;filters[f]()}});
 document.addEventListener('change',e=>{
   if(e.target.name==='patientId'&&e.target.form&&e.target.form.querySelector('#alg')){const p=pat(e.target.value),a=e.target.form.querySelector('#alg');a.hidden=!(p&&p.allergies);a.innerHTML='Allergies: <b>'+esc(p?p.allergies:'')+'</b>'}
@@ -2202,7 +2223,15 @@ const NEWCOLLS=['audit','queue','roster','vitals','media','cashups','referrals',
 function ensureColls(){NEWCOLLS.forEach(k=>{if(!Array.isArray(db[k]))db[k]=[]})}
 
 /* ---- patient queue ---- */
-const QDEPT={G:'Consultation',N:'Triage (nurse)',L:'Laboratory',P:'Pharmacy',C:'Cashier'};
+const QDEPT={G:'Consultation',N:'Triage (nurse)',L:'Laboratory',P:'Pharmacy',C:'Cashier',V:'Vaccination',A:'Antenatal clinic',D:'Dressing and injections',R:'Reports and certificates'};
+const QGO={G:'the consultation room',N:'triage, the nurse',L:'the laboratory',P:'the pharmacy',C:'the cashier',V:'vaccination',A:'the antenatal clinic',D:'dressing and injections',R:'the records desk'};
+const QSAY=q=>'Ticket '+q.dept.split('').join(' ')+' '+q.no+(q.patientId&&pat(q.patientId)?', '+pat(q.patientId).name.split(' ')[0]:q.name?', '+String(q.name).split(' ')[0]:'')+'. Please go to '+(QGO[q.dept]||QDEPT[q.dept])+'.';
+function qSay(text){try{const u=new SpeechSynthesisUtterance(text);u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function qGuess(pid){
+  const a=pid&&db.appointments.find(x=>x.patientId===pid&&x.date===today()&&x.status==='Scheduled');const r=((a&&a.reason)||'').toLowerCase();
+  if(/vaccin|immuni/.test(r))return 'V';if(/antenatal|anc\b|pregnan/.test(r))return 'A';if(/lab|test|blood/.test(r)&&!/result/.test(r))return 'L';if(/dress|inject|wound/.test(r))return 'D';if(/certificate|report|letter/.test(r))return 'R';
+  return 'G';
+}
 const qLabel=q=>q.dept+String(q.no).padStart(3,'0');
 const qDay=()=>db.queue.filter(q=>q.day===today());
 const qSort=(a,b)=>(b.urgent?1:0)-(a.urgent?1:0)||a.no-b.no;
@@ -2211,7 +2240,7 @@ const qNow=d=>qDay().filter(q=>q.status==='Serving'&&q.dept===d).sort((a,b)=>(b.
 const qName=q=>q.patientId&&pat(q.patientId)?pat(q.patientId).name:(q.name||'Walk-in');
 function qSpeak(q){
   if(!S.qvoice)return;
-  try{const u=new SpeechSynthesisUtterance('Ticket '+q.dept.split('').join(' ')+' '+q.no+'. Please go to '+QDEPT[q.dept]+'.');u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}
+  qSay(QSAY(q));
 }
 function qCall(id){
   const q=db.queue.find(x=>x.id===id);if(!q)return;
@@ -2225,8 +2254,8 @@ V.queue=()=>{
     const now=qNow(d),w=qWaiting(d),oth=dn.filter(q=>q.dept===d&&(q.status==='Done'||q.status==='Skipped')).sort((a,b)=>b.no-a.no).slice(0,3);
     if(!now&&!w.length&&!oth.length&&!dept)return '';
     return `<section class="card"><header><h2>${esc(QDEPT[d])}</h2><div class="hv-acts"><button class="btn sm pri" data-act="qNext" data-d="${d}" ${w.length?'':'disabled'}>Call next</button></div></header>
-    <div class="qnow">${now?`<div><div class="muted sm">Now serving</div><b class="qbig">${qLabel(now)}</b><div>${esc(qName(now))}</div></div><div class="right">${now.dept==='N'?hb('Send to doctor','qToDoc',now.id,'sm pri')+' ':''}${hb('Done','qDone',now.id,now.dept==='N'?'sm':'sm pri')} ${hb('Skip','qSkip',now.id,'sm')}</div>`:`<span class="muted">Nobody is being served.</span>`}</div>
-    ${w.length?`<div class="list">${w.map(q=>`<div class="row"><div><b class="mono">${qLabel(q)}</b> ${q.urgent?pill('Priority','bad'):''}<div class="sm">${esc(qName(q))}${q.note?' · <span class="muted">'+esc(q.note)+'</span>':''}</div><div class="muted sm">Waiting ${Math.max(0,Math.round((Date.now()-new Date(q.ts))/6e4))} min</div></div><div class="right nowrap">${hb('Call','qCallBtn',q.id,'sm')} ${hb('Ticket','qTicket',q.id,'sm')}</div></div>`).join('')}</div>`:'<p class="muted sm" style="margin:8px 0 0">No one waiting.</p>'}
+    <div class="qnow">${now?`<div><div class="muted sm">Now serving</div><b class="qbig">${qLabel(now)}</b><div>${esc(qName(now))}</div></div><div class="right">${now.dept==='N'?hb('Send to doctor','qToDoc',now.id,'sm pri')+' ':''}${hb('Send on…','qSendOn',now.id,'sm')} ${hb('Done','qDone',now.id,now.dept==='N'?'sm':'sm pri')} ${hb('Skip','qSkip',now.id,'sm')}</div>`:`<span class="muted">Nobody is being served.</span>`}</div>
+    ${w.length?`<div class="list">${w.map(q=>`<div class="row"><div><b class="mono">${qLabel(q)}</b> ${q.urgent?pill('Priority','bad'):''}<div class="sm">${esc(qName(q))} · <b>${esc(QDEPT[q.dept])}</b>${q.note?' · <span class="muted">'+esc(q.note)+'</span>':''}</div><div class="muted sm">Waiting ${Math.max(0,Math.round((Date.now()-new Date(q.ts))/6e4))} min</div></div><div class="right nowrap">${hb('Call','qCallBtn',q.id,'sm')} ${hb('Ticket','qTicket',q.id,'sm')}</div></div>`).join('')}</div>`:'<p class="muted sm" style="margin:8px 0 0">No one waiting.</p>'}
     ${oth.length?`<div class="muted sm" style="margin-top:8px">Recently: ${oth.map(q=>qLabel(q)+(q.status==='Skipped'?' (skipped, '+'<a href="#" data-act="qBack" data-id="'+q.id+'">put back</a>)':'')).join(', ')}</div>`:''}</section>`;
   }).join('');
   return `<div class="kpis" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="kpi"><span>Waiting now</span><b>${wait}</b></div><div class="kpi"><span>Served today</span><b>${done}</b></div><div class="kpi"><span>Tickets today</span><b>${dn.length}</b></div></div>
@@ -2235,21 +2264,40 @@ V.queue=()=>{
   <span class="grow"></span><label class="chk" style="margin:0"><input type="checkbox" data-act="qVoice" ${S.qvoice?'checked':''} style="width:auto"><span>Speak the number aloud</span></label></div>
   <div class="cols">${secs||`<div class="card">${empty('The queue is empty. Add the first patient.')}</div>`}</div>`;
 };
+function qIssue(o){
+  const no=Math.max(0,...qDay().filter(q=>q.dept===o.dept).map(q=>q.no))+1;
+  const q={id:uid('Q'),day:today(),no:no,dept:o.dept,patientId:o.patientId||'',name:o.patientId?'':(o.name||''),note:o.note||'',urgent:!!o.urgent,status:'Waiting',ts:new Date().toISOString(),by:me.name};
+  db.queue.push(q);return q;
+}
+const qActive=(pid,d)=>qDay().filter(q=>pid&&q.patientId===pid&&(q.status==='Waiting'||q.status==='Serving')&&(!d||q.dept===d));
 function qAdd(pid){
   openModal('Add to queue',`${sel('Patient','patientId',[['','— Walk-in, not registered —'],...patOpts()],pid||'')}${fld('Name (for a walk-in)','name')}
-  ${sel('Going to','dept',Object.entries(QDEPT),'G')}${fld('Note (optional)','note','','text','placeholder="e.g. fever, follow-up"')}
+  ${sel('Reason for visit (where the patient goes)','dept',Object.entries(QDEPT),qGuess(pid))}<p class="muted sm" style="margin:-6px 0 0">Each reason gets its own ticket numbers, for example V001 for vaccination and L001 for the lab. A patient who comes for two reasons gets two tickets.</p>${fld('Note (optional)','note','','text','placeholder="e.g. fever, follow-up"')}
   <label class="chk"><input type="checkbox" name="urgent" style="width:auto"><span>Priority (emergency, pregnant, elderly, very sick child)</span></label>
   <label class="chk"><input type="checkbox" name="print" style="width:auto"><span>Print a ticket</span></label>`,{submit:'Add to queue',onSubmit:fd=>{
-    const pid2=fd.get('patientId'),nm=(fd.get('name')||'').trim();
+    const pid2=fd.get('patientId'),nm=(fd.get('name')||'').trim(),d=fd.get('dept');
     if(!pid2&&!nm){toast('Choose a patient or type the name.','bad');return false}
-    const d=fd.get('dept'),no=Math.max(0,...qDay().filter(q=>q.dept===d).map(q=>q.no))+1;
-    const q={id:uid('Q'),day:today(),no:no,dept:d,patientId:pid2,name:pid2?'':nm,note:fd.get('note')||'',urgent:fd.has('urgent'),status:'Waiting',ts:new Date().toISOString(),by:me.name};
-    db.queue.push(q);save();readyNotify(q,false);toast('Ticket '+qLabel(q)+' for '+qName(q)+'.');
+    const dup=qActive(pid2,d)[0];
+    if(dup){toast(qName(dup)+' already has ticket '+qLabel(dup)+' waiting for '+QDEPT[d]+'. Choose a different reason.','bad');return false}
+    const other=qActive(pid2).map(qLabel);
+    const q=qIssue({dept:d,patientId:pid2,name:nm,note:fd.get('note'),urgent:fd.has('urgent')});
+    save();readyNotify(q,false);toast('Ticket '+qLabel(q)+' for '+qName(q)+' · '+QDEPT[d]+(other.length?'. Also waiting: '+other.filter(x=>x!==qLabel(q)).join(', '):'')+'.');
     if(fd.has('print'))setTimeout(()=>printHTML(ticketHTML(q)),0);
     if(S.view!=='queue')go('queue');else render();
   }});
 }
-function ticketHTML(q){return `<div style="text-align:center;font-family:Georgia,serif;max-width:260px;margin:0 auto"><div style="font-size:18px">${esc(db.settings.clinic)}</div><div style="font-size:13px">${esc(QDEPT[q.dept])}</div><div style="font-size:64px;font-weight:700;margin:8px 0">${qLabel(q)}</div><div style="font-size:15px">${esc(qName(q))}</div><div style="font-size:12px;margin-top:6px">${new Date(q.ts).toLocaleString()}${q.urgent?'<br><b>PRIORITY</b>':''}</div><div style="font-size:12px;margin-top:8px">Please wait until your number is called.</div></div>`}
+function qSendOn(id){
+  const q0=db.queue.find(x=>x.id===id);if(!q0)return;
+  openModal('Send '+qName(q0)+' on to…',`${sel('Next step','dept',Object.entries(QDEPT).filter(e=>e[0]!==q0.dept),q0.dept==='L'||q0.dept==='D'?'G':q0.dept==='G'?'L':'G')}${fld('Note (optional)','note',q0.note||'')}
+  <p class="muted sm" style="margin:0">${esc(qLabel(q0))} is marked done and the patient gets a new ticket for the next step.</p>`,{submit:'Send on',onSubmit:fd=>{
+    const d=fd.get('dept');const dup=qActive(q0.patientId,d)[0];
+    if(dup){toast(qName(dup)+' already has ticket '+qLabel(dup)+' for '+QDEPT[d]+'.','bad');return false}
+    q0.status='Done';q0.doneAt=new Date().toISOString();
+    const q=qIssue({dept:d,patientId:q0.patientId,name:q0.name,note:fd.get('note'),urgent:q0.urgent});
+    save();readyNotify(q,false);toast(qName(q)+' sent on: ticket '+qLabel(q)+' for '+QDEPT[d]+'.');render();qDispRefresh();
+  }});
+}
+function ticketHTML(q){return `<div style="text-align:center;font-family:Georgia,serif;max-width:260px;margin:0 auto"><div style="font-size:18px">${esc(db.settings.clinic)}</div><div style="font-size:15px;font-weight:600">${esc(QDEPT[q.dept])}</div><div style="font-size:64px;font-weight:700;margin:8px 0">${qLabel(q)}</div><div style="font-size:15px">${esc(qName(q))}</div>${q.note?`<div style="font-size:13px">${esc(q.note)}</div>`:''}<div style="font-size:13px;margin-top:4px">Please go to ${esc(QGO[q.dept]||QDEPT[q.dept])} when your number is called.</div><div style="font-size:12px;margin-top:6px">${new Date(q.ts).toLocaleString()}${q.urgent?'<br><b>PRIORITY</b>':''}</div><div style="font-size:12px;margin-top:8px">Keep this ticket. A different reason needs a different ticket.</div></div>`}
 
 /* waiting-room screen */
 let qdTimer=0,qdSeen='';
@@ -2668,12 +2716,13 @@ dashShortcutsList=dashShortcuts;
 const copyText=t=>navigator.clipboard?navigator.clipboard.writeText(t).then(()=>toast('Copied.'),()=>toast('Press and hold to copy.','bad')):toast('Press and hold to copy.','bad');
 Object.assign(actions,{
   actMore:()=>{S.actmore=true;render()},
-  dashTab:d=>{S.dtab=d.t;render()},attToggle:()=>{S.attOpen=!S.attOpen;render()},recheck:()=>{S.rise=true;try{sysChecks()}catch(e){}render();toast('Checked just now.')},kpiMore:()=>{S.kpiMore=!S.kpiMore;render()},tilesMore:()=>{S.tilesMore=!S.tilesMore;render()},
+  dashTab:d=>{S.dtab=d.t;render()},attToggle:()=>{S.attOpen=!S.attOpen;render()},recheck:()=>{S.rise=true;try{sysChecks()}catch(e){}render();const A=attItems(),sc=Math.max(0,100-A.reduce((n,x)=>n+x.w,0));toast('Checked just now: score '+sc+(A.length?', '+A.length+' thing'+(A.length>1?'s':'')+' to check.':', all clear.'))},removeLogo:()=>{delete db.settings.logo;logAct('Clinic logo removed','');save();render();applyLogo();toast('Logo removed.')},kpiMore:()=>{S.kpiMore=!S.kpiMore;render()},tilesMore:()=>{S.tilesMore=!S.tilesMore;render()},
   actCsv:()=>download('activity-log-'+today()+'.csv',csv([['When','Who','Role','What','Details'],...auditList().map(a=>[a.ts,a.user,a.role,a.action,a.detail])]),'text/csv'),
   actPrint:()=>printHTML(letterhead()+'<h2>Activity log</h2><p>Printed '+fdate(today())+' by '+esc(me.name)+'</p><table style="width:100%;border-collapse:collapse;font-size:12px"><tbody>'+auditList().slice(0,400).map(a=>'<tr><td>'+esc(fdtl(a.ts))+'</td><td>'+esc(a.user)+'</td><td><b>'+esc(a.action)+'</b></td><td>'+esc(a.detail)+'</td></tr>').join('')+'</tbody></table>'),
   myPw:()=>changeMyPw(false),
   lang:()=>setLang(LANG==='lg'?'en':'lg'),
   qAdd:d=>qAdd(d.pid),
+  qSendOn:d=>qSendOn(d.id),
   qNext:d=>{const w=qWaiting(d.d)[0];if(w)qCall(w.id)},
   qCallBtn:d=>qCall(d.id),
   qDone:d=>{const q=db.queue.find(x=>x.id===d.id);q.status='Done';q.doneAt=new Date().toISOString();save();render();qDispRefresh()},
@@ -2685,7 +2734,7 @@ Object.assign(actions,{
   qBack:(d,t,e)=>{e.preventDefault();const q=db.queue.find(x=>x.id===d.id);q.status='Waiting';save();render()},
   qTicket:d=>printHTML(ticketHTML(db.queue.find(x=>x.id===d.id))),
   qScreen:()=>qScreen(),
-  qVoice:(d,t)=>{S.qvoice=t.checked;if(S.qvoice)qSpeak({dept:'G',no:1})},
+  qVoice:(d,t)=>{S.qvoice=t.checked;if(S.qvoice)qSay('Voice announcements are on.')},
   rosWk:d=>{S.rwk=+d.n===0?0:(S.rwk||0)+(+d.n);render()},
   rosAdd:d=>{if(me.role==='admin')rosAdd(d.d,d.s)},
   rosDel:d=>{if(me.role!=='admin')return;const r=db.roster.find(x=>x.id===d.id);if(!r)return;openModal('Remove from roster',`<p style="margin:0">Remove <b>${esc(docName(r.userId))}</b> from the ${esc(SHIFTS.find(s=>s[0]===r.shift)[1].toLowerCase())} shift on ${fdate(r.date)}?</p>`,{submit:'Remove',onSubmit:()=>{db.roster=db.roster.filter(x=>x.id!==d.id);logAct('Roster changed','Removed '+docName(r.userId)+' from '+r.date);save();render()}})},
@@ -3354,7 +3403,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')){
   window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 }
 /* ============ boot ============ */
-function showLogin(){setTimeout(greetTick,0);$('#demoBox').hidden=cloudOn();$('#cloudLink').textContent=cloudOn()?'Online database connected ✓':'Connect this phone to the online database';$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
+function showLogin(){setTimeout(greetTick,0);applyLogo();$('#demoBox').hidden=cloudOn();$('#cloudLink').textContent=cloudOn()?'Online database connected ✓':'Connect this phone to the online database';$('#app').hidden=true;$('#login').hidden=false;$('#loginClinic').textContent=db.settings.clinic;$('#lu').value='';$('#lp').value='';$('#lerr').textContent='';location.hash=''}
 function enter(){
   $('#login').hidden=true;$('#app').hidden=false;
   $('#meName').textContent=me.name;$('#meRole').textContent=ROLE[me.role];buildNav();
@@ -3381,7 +3430,7 @@ const NOTE_CAT={ready:'queue',lab:'lab',labres:'lab',stock:'stock',newpat:'patie
 const CAT_LABEL={queue:'Patients waiting or ready for me',lab:'Lab orders and results',stock:'Medicines: expired, expiring, low or out of stock',appt:'Appointments and reminders',requests:'Patient requests and home visits',rx:'New prescriptions',billing:'Payments received',admit:'Admissions and discharges',patients:'New patients registered',referral:'Referrals',staff:'My shift and check-in'};
 const noteOffKey=()=>'caredesk.noteOff.'+(me?me.id:'');
 const noteOff=()=>{try{return JSON.parse(localStorage.getItem(noteOffKey())||'[]')}catch(e){return []}};
-const QROLE={G:['doctor'],N:['nurse'],L:['labtech'],P:['pharmacist'],C:['cashier']};
+const QROLE={G:['doctor'],N:['nurse'],L:['labtech'],P:['pharmacist'],C:['cashier'],V:['nurse'],A:['nurse'],D:['nurse'],R:['receptionist']};
 const URGROLE={doctor:['doctor'],nurse:['nurse'],pharmacy:['pharmacist'],lab:['labtech'],gate:['gatekeeper']};
 const noteForMe=n=>!!(me&&n&&n.ts&&(n.from!==me.id||n.kind==='test')&&((n.uids||[]).includes(me.id)||(n.roles||[]).includes(me.role))&&(n.cat==='urgent'||!noteOff().includes(n.cat)));
 const notesMine=()=>(db.notes||[]).filter(noteForMe).sort((a,b)=>b.ts.localeCompare(a.ts));
