@@ -84,7 +84,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .hero .lbl b{color:var(--sc,#4f8cff)}
 .hbtn{display:block;margin:0 auto;border:0;border-radius:999px;padding:15px 0;width:min(100%,300px);font:inherit;font-size:18px;font-weight:600;color:#fff;background:linear-gradient(135deg,#2c7bff,#1a62e6);cursor:pointer;box-shadow:0 8px 22px rgba(44,123,255,.35)}
 .hbtn:active{transform:scale(.98)}
-.banner{display:flex;align-items:center;gap:14px;margin:22px 0 14px;padding:14px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
+.banner{display:flex;align-items:center;gap:14px;margin:16px 0 14px;padding:14px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--line)}
 .banner .bi{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--soft);color:var(--brand)}
 .banner.warn .bi{background:var(--warn-bg);color:var(--warn)}.banner.bad .bi{background:var(--bad-bg);color:var(--bad)}
 .banner .bi svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -996,8 +996,7 @@ function homeHero(){
   const top=A[0],more=A.length-1;
   const banner=top?`<div class="banner ${top.tone}"><div class="bi"><svg viewBox="0 0 24 24">${top.ic}</svg></div><div class="bt"><b>${esc(top.title)}</b>${top.sub?`<span>${esc(top.sub)}</span>`:''}</div><button class="btn pri" data-act="${top.act}"${top.data?` data-v="${top.data}"`:''}>${esc(top.btn)}</button></div>`
     :`<div class="banner"><div class="bi"><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></div><div class="bt"><b>All clear</b><span>Nothing needs your attention right now.</span></div></div>`;
-  return `<div class="hero" style="--sc:${band[1]}"><svg class="shield" viewBox="0 0 200 220" role="img" aria-label="Clinic health score ${sc} out of 100, ${band[0]}"><defs><radialGradient id="shg" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#dbe7ff"/><stop offset="1" stop-color="${band[1]}"/></radialGradient></defs><path d="M100 8C128 24 158 30 186 28c6 74-8 140-86 186C22 168 8 102 14 28c28 2 58-4 86-20z" fill="url(#shg)"/><text class="sn" x="100" y="128" text-anchor="middle">${sc}</text></svg>
-  <div class="lbl"><b>${band[0]}</b> · clinic score</div><button class="hbtn" data-act="recheck">Re-check</button></div>${banner}${more>0?`<button class="attmore" data-act="attToggle">${S.attOpen?'Hide the list':'See '+more+' more thing'+(more>1?'s':'')+' to check'}</button>`:''}${S.attOpen?dashAlerts():''}`;
+  return `${banner}${more>0?`<button class="attmore" data-act="attToggle">${S.attOpen?'Hide the list':'See '+more+' more thing'+(more>1?'s':'')+' to check'}</button>`:''}${S.attOpen?dashAlerts():''}`;
 }
 const MODC={patients:'#2f7df6',appointments:'#7c5cff',queue:'#16b8a6',requests:'#ff7a45',homevisits:'#f5a300',lab:'#1fc27a',inventory:'#ef5a8a',billing:'#00a6d6',roster:'#8b6cff',attendance:'#4e9bff',chat:'#2fc46d',referrals:'#ff6b6b',ai:'#a855f7',visitors:'#14b8c4',activity:'#8892a6',users:'#5b8def',settings:'#7a8599'};
 function modStat(m){
